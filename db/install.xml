@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/virtuallab/db" VERSION="20101203" COMMENT="XMLDB file for Moodle mod/virtuallab"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="virtuallab" COMMENT="Default comment for virtuallab, please edit me">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true"/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Course virtuallab activity belongs to"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="name field for moodle instances"/>
+        <FIELD NAME="mfilepar" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="mfile name for parameters"/>
+        <FIELD NAME="foldername" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="folder with experiment on server"/>
+        <FIELD NAME="mfilescript" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="mfile name for script"/>
+        <FIELD NAME="ipadrs" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="ip adrs for matlab server"/>
+        <FIELD NAME="ipdb" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="ip adrs for mongo database"/>
+        <FIELD NAME="port" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="port for matlab server"/>
+        <FIELD NAME="portdb" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="port for mongo database"/>
+        <FIELD NAME="intro" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="General introduction of the virtuallab activity"/>
+        <FIELD NAME="inputs" TYPE="text" NOTNULL="true" COMMENT="array for inputs"/>
+        <FIELD NAME="outputs" TYPE="text" NOTNULL="true" COMMENT="array for outputs"/>
+        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="Format of the intro field (MOODLE, HTML, MARKDOWN...)"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="grade" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="100" SEQUENCE="false" COMMENT="The maximum grade. Can be negative to indicate the use of a scale."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>

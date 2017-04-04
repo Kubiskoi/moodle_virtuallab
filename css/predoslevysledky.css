@@ -1,0 +1,18 @@
+.jh-predosle-vysledky {
+  border-collapse: collapse;
+}
+
+.jh-predosle-vysledky th {
+  border-bottom: 1px solid;
+}
+.jh-predosle-vysledky td, .jh-predosle-vysledky th {
+  border-left: 1px solid;
+  padding: 5px 10px;
+}
+.jh-predosle-vysledky td:first-child, .jh-predosle-vysledky th:first-child {
+  border-left: none;
+}
+
+.jh-predosle-vysledky tr:nth-child(even){
+	background-color: #eee;
+}

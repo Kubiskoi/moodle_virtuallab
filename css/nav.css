@@ -1,0 +1,45 @@
+.jh-wrapper{
+	width: 100%;
+	float: left;
+}
+
+.jh-nav-menu{
+	width: 15%; 
+	float: left;
+}
+
+.jh-section-content{
+	width: 85%;
+	float: right;
+}
+
+
+.jh-nav-menu > p{
+	margin-bottom: 0;
+}
+
+.jh-nav-button{
+	background: none;
+	width: 100%;
+	border: none;
+	text-align: left;
+}
+
+.jh-nav-button:hover{
+	background: rgba(173, 216, 230, 0.4);
+}
+
+.jh-nav-button:focus{
+	outline: 0;
+}
+
+/*.jh-moved-button-text{
+	padding-left: 20px;
+}*/
+
+.jh-nav-button-selected{
+	/*important preto,
+	lebo ked je nieco uz selected a pride na to kurzor je to hover a zmeni farbu, ked je pouzity important farba ostava*/
+	background: rgba(173, 216, 230, 0.8)!important;
+	font-weight: bold;
+}

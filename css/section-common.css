@@ -1,0 +1,15 @@
+/*spolocne css pre vsetky sekcie*/
+.jh-section-wrapper{
+	margin-left: 20px;
+	float: left;
+	width: 100%;
+}
+.jh-experiment-text{
+	width: 75%;
+	float: left;
+}
+.jh-experiment-input{
+	width: 25%;
+	height: 100px;
+	float: right;
+}
