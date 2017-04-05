@@ -51,7 +51,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 		//zobraz loading gif
 		$scope.show_loading = true;
 		//odosli vstupne parametre na matlabovky server
-		// socket.emit('input parameters', args);
+		socket.emit('input parameters', args);
 	})
 	
 	
@@ -72,9 +72,31 @@ app.controller('ExperimentCtrl',function($scope,$http,MyGlobalVars,$rootScope,my
 	})
 
 	//precitaj formular a prepni sa do kontroleru pre priebeh experimentu
-	$scope.odosli = function(){
-		console.log('odosli');
-			$rootScope.$broadcast('spustiExperiment', {});
+	//ako vstu submitu je samotny formular
+	$scope.submit_input_form = function(form){
+		var obj = {}
+		obj["inputs"] = []
+
+		//precitaj inputy formu
+		angular.forEach(form.$$element[0].children,function(child){
+			if(child.name){
+				var inp = {};
+				inp[child.name] = child.value;
+				obj["inputs"].push(inp)
+			}
+		})
+		MyGlobalVars.get_settings().then(function(data){
+			//tu este prida do objektu potrebne parametre, prejde do kontroleru priebehu a cez socket posle serveru udaje na spustenie simulacie
+			obj["logged_user"] = data.logged_user;
+			obj["foldername"] = data.foldername;
+			obj["mfilepar"] = data.mfilepar;
+			obj["mfilescript"] = data.mfilescript;
+
+
+			$scope.ShowSection('priebeh');
+			$rootScope.$broadcast('spustiExperiment', obj);
+
+		})
 
 
 
