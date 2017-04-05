@@ -51,7 +51,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 		//zobraz loading gif
 		$scope.show_loading = true;
 		//odosli vstupne parametre na matlabovky server
-		socket.emit('input parameters', args);
+		// socket.emit('input parameters', args);
 	})
 	
 	
@@ -73,23 +73,28 @@ app.controller('ExperimentCtrl',function($scope,$http,MyGlobalVars,$rootScope,my
 
 	//precitaj formular a prepni sa do kontroleru pre priebeh experimentu
 	$scope.odosli = function(){
-		if($scope.v0 >= 0 && ($scope.alfa>=0 && $scope.alfa<=90)){
-			//tento scope vie zavolat funkciu aj kontroleru pre sekcie lebo v html strukture je vnoreny
-			$scope.ShowSection('priebeh');
-			var obj = {};
-			// obj["logged_user"]=MyGlobalVars.logged_user;
-			// obj["foldername"]=MyGlobalVars.foldername;
-			// obj["mfilepar"]=MyGlobalVars.mfilepar;
-			// obj["mfilescript"]=MyGlobalVars.mfilescript;
-			// obj["v0"]=$scope.v0;
-			// obj["alfa"]=$scope.alfa;
-			obj["inputs"] = []
-			obj["inputs"].push({"v0":$scope.v0})
-			obj["inputs"].push({"alfa":$scope.alfa})
-			$rootScope.$broadcast('spustiExperiment', obj);
-		}else{
-			alert('uprav vstupne parametre');
-		}
+		console.log('odosli');
+			$rootScope.$broadcast('spustiExperiment', {});
+
+
+
+		// if($scope.v0 >= 0 && ($scope.alfa>=0 && $scope.alfa<=90)){
+		// 	//tento scope vie zavolat funkciu aj kontroleru pre sekcie lebo v html strukture je vnoreny
+		// 	$scope.ShowSection('priebeh');
+		// 	var obj = {};
+		// 	// obj["logged_user"]=MyGlobalVars.logged_user;
+		// 	// obj["foldername"]=MyGlobalVars.foldername;
+		// 	// obj["mfilepar"]=MyGlobalVars.mfilepar;
+		// 	// obj["mfilescript"]=MyGlobalVars.mfilescript;
+		// 	// obj["v0"]=$scope.v0;
+		// 	// obj["alfa"]=$scope.alfa;
+		// 	obj["inputs"] = []
+		// 	obj["inputs"].push({"v0":$scope.v0})
+		// 	obj["inputs"].push({"alfa":$scope.alfa})
+		// 	$rootScope.$broadcast('spustiExperiment', obj);
+		// }else{
+		// 	alert('uprav vstupne parametre');
+		// }
 	}
 })
 
