@@ -1,38 +1,67 @@
-app.factory('MyGlobalVars', function() {
+//phpcko ktore je moodlovske a ma pristup k databaze vytvori ukryte divy s nastaveniami vytiahnutymi z databazy
+
+app.factory('MyGlobalVars', function($http,$q) {
+    var deferred = $q.defer();
+    // $location nejde lebo nie je zapnuty HTML5 mode
+    const id_of_virtuallab = parseInt(window.location.search.substring(4));
+
+    var req = {
+        method: 'GET',
+        url: 'get_settings.php',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        params: {id:id_of_virtuallab}
+      }
+  $http(req).then(function(data){
+      deferred.resolve({
+            // path_to_imgs : '/mod/virtuallab/img/experimenty/',
+            path_to_loading_gif : '/mod/virtuallab/img/',
+            logged_user: data.data.username,
+            mfilepar: data.data.mfilepar,
+            mfilescript: data.data.mfilescript,
+            ipadrs: data.data.ipadrs,
+            port: data.data.port,
+            foldername: data.data.foldername,
+            portdb: data.data.portdb,
+            ipdb: data.data.ipdb,
+            inputs: data.data.inputs,
+            outputs: data.data.outputs
+      })
+  })
+
   return {
-      // path_to_imgs : '/mod/virtuallab/img/experimenty/',
-      path_to_loading_gif : '/mod/virtuallab/img/',
-      logged_user: document.getElementById('jh-logged-user').innerHTML,
-      mfilepar: document.getElementById('jh-mfilepar').innerHTML,
-      mfilescript: document.getElementById('jh-mfilescript').innerHTML,
-      ipadrs: document.getElementById('jh-ipadrs').innerHTML,
-      port: document.getElementById('jh-port').innerHTML,
-      foldername: document.getElementById('jh-foldername').innerHTML,
-      portdb: document.getElementById('jh-portdb').innerHTML,
-      ipdb: document.getElementById('jh-ipdb').innerHTML,
-      inputs: document.getElementById('jh-inputs').innerHTML,
-      outputs: document.getElementById('jh-outputs').innerHTML
-  };
+    get_settings: function(){
+      return deferred.promise;
+
+    }
+  }
+
 });
 
 // http://briantford.com/blog/angular-socket-io
-app.factory('socket', function ($rootScope,MyGlobalVars) {
-  var socket = io(MyGlobalVars.ipadrs +':'+MyGlobalVars.port);
+app.factory('socket', function ($rootScope) {
+  this.socket;
+  var that = this;
+
   return {
+    init:function(ipadrs,port){
+      that.socket = io(ipadrs +':'+ port);
+    },
     on: function (eventName, callback) {
-      socket.on(eventName, function () {  
+      that.socket.on(eventName, function () {  
         var args = arguments;
         $rootScope.$apply(function () {
-          callback.apply(socket, args);
+          callback.apply(that.socket, args);
         });
       });
     },
     emit: function (eventName, data, callback) {
-      socket.emit(eventName, data, function () {
+      that.socket.emit(eventName, data, function () {
         var args = arguments;
         $rootScope.$apply(function () {
           if (callback) {
-            callback.apply(socket, args);
+            callback.apply(that.socket, args);
           }
         });
       })

@@ -15,13 +15,9 @@
 		<div class="jh-experiment-input">
 			<h3>Vstupy</h3>
 			<form novalidate="">
-				<input ng-repeat="input in inputs" type="number" name={{input.name}} placeholder="{{input.label}}" ng-value="{{input.init}}">
-<!-- 				<input type="number" ng-model="v0" min="0" placeholder="v0"/>
-				<br>
-				<input type="number" ng-model="alfa" placeholder="alfa"/>
-				<br>
+				<input ng-repeat-start="input in inputs" type="number" name={{input.name}} placeholder="{{input.label}}" ng-value="{{input.init}}">
+				<br ng-repeat-end>
 				<input type="submit" ng-click="odosli()" value="Save"/>
- -->				
 			</form>
 		</div>
 	</div>

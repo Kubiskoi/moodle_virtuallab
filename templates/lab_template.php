@@ -5,16 +5,16 @@
 // var_dump(phpversion("mongodb"));
 // phpinfo();
 
-echo '<div id="jh-logged-user" hidden>'.$USER->username.'</div>';
-echo '<div id="jh-mfilepar" hidden>'.$virtuallab->mfilepar.'</div>';
-echo '<div id="jh-mfilescript" hidden>'.$virtuallab->mfilescript.'</div>';
-echo '<div id="jh-ipadrs" hidden>'.$virtuallab->ipadrs.'</div>';
-echo '<div id="jh-port" hidden>'.$virtuallab->port.'</div>';
-echo '<div id="jh-foldername" hidden>'.$virtuallab->foldername.'</div>';
-echo '<div id="jh-portdb" hidden>'.$virtuallab->portdb.'</div>';
-echo '<div id="jh-ipdb" hidden>'.$virtuallab->ipdb.'</div>';
-echo '<div id="jh-inputs" hidden>'.$virtuallab->inputs.'</div>';
-echo '<div id="jh-outputs" hidden>'.$virtuallab->outputs.'</div>';
+// echo '<div id="jh-logged-user" hidden>'.$USER->username.'</div>';
+// echo '<div id="jh-mfilepar" hidden>'.$virtuallab->mfilepar.'</div>';
+// echo '<div id="jh-mfilescript" hidden>'.$virtuallab->mfilescript.'</div>';
+// echo '<div id="jh-ipadrs" hidden>'.$virtuallab->ipadrs.'</div>';
+// echo '<div id="jh-port" hidden>'.$virtuallab->port.'</div>';
+// echo '<div id="jh-foldername" hidden>'.$virtuallab->foldername.'</div>';
+// echo '<div id="jh-portdb" hidden>'.$virtuallab->portdb.'</div>';
+// echo '<div id="jh-ipdb" hidden>'.$virtuallab->ipdb.'</div>';
+// echo '<div id="jh-inputs" hidden>'.$virtuallab->inputs.'</div>';
+// echo '<div id="jh-outputs" hidden>'.$virtuallab->outputs.'</div>';
 
 
 
