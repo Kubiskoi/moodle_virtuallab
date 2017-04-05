@@ -1,5 +1,4 @@
-//phpcko ktore je moodlovske a ma pristup k databaze vytvori ukryte divy s nastaveniami vytiahnutymi z databazy
-
+// ziskaj nastavenia modulu, ktore sa nastavuju pri vytvarani a su ulozene v moodlovskej databaze
 app.factory('MyGlobalVars', function($http,$q) {
     var deferred = $q.defer();
     // $location nejde lebo nie je zapnuty HTML5 mode
