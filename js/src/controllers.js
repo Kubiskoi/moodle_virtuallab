@@ -25,6 +25,63 @@ app.controller('SectionCtrl', function($scope,$rootScope) {
 });
 
 
+//kontroller pre sekciu kde je teoreticky popois experimentu a formular pre vstupne udaje
+app.controller('ExperimentCtrl',function($scope,$http,MyGlobalVars,$rootScope,myStringToArrayWithObjects){
+	//ci ma byt vidiet submit button formularu
+	$scope.submitbu_show = true;
+	//hlaska o zlych vstupoch skovana
+	$scope.wrong_input_format_notice_show = false;
+
+	//z MyGlobalVars zisti string ktory bol zadani pri vytvarani laboratoria v moodli, ktory zprasujes a podla neho vytvoris formular pre vstupy
+	MyGlobalVars.get_settings().then(function(data){
+		//data.inputs je ten string
+		// funkcia myStringToArrayWithObjects ho prerobi na pole objekotv ale vrati 'wrong input structure'
+		//ak boli chybne zadane inputy
+		var formated = myStringToArrayWithObjects.convert(data.inputs);
+		if(formated == 'wrong input structure'){
+			$scope.inputs = [];
+			//skovaj submitbutton
+			$scope.submitbu_show = false;
+			//zobraz hlasku
+			$scope.wrong_input_format_notice_show = true;
+
+		//inak zobraz sa spravi formular na zaklade vreatene pola s objektami
+		}else{
+			$scope.inputs = formated;
+		}
+
+	})
+
+	//precitaj formular a prepni sa do kontroleru pre priebeh experimentu
+	//ako vstu submitu je samotny formular
+	$scope.submit_input_form = function(form){
+		var obj = {}
+		obj["inputs"] = []
+
+		//precitaj inputy formu
+		angular.forEach(form.$$element[0].children,function(child){
+			if(child.name){
+				var inp = {};
+				inp[child.name] = child.value;
+				obj["inputs"].push(inp)
+			}
+		})
+		MyGlobalVars.get_settings().then(function(data){
+			//tu este prida do objektu potrebne parametre, prejde do kontroleru priebehu a cez socket posle serveru udaje na spustenie simulacie
+			obj["logged_user"] = data.logged_user;
+			obj["foldername"] = data.foldername;
+			obj["mfilepar"] = data.mfilepar;
+			obj["mfilescript"] = data.mfilescript;
+
+
+			$scope.ShowSection('priebeh');
+			$rootScope.$broadcast('spustiExperiment', obj);
+
+		})
+	}
+})
+
+
 //kontroler priebehu simulacie experimentu
 app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socket){
 	
@@ -61,64 +118,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 })
 
 
-//kontroller pre sekciu kde je teoreticky popois experimentu a formular pre vstupne udaje
-app.controller('ExperimentCtrl',function($scope,$http,MyGlobalVars,$rootScope,myStringToArrayWithObjects){
 
-	//z MyGlobalVars zisti string ktory bol zadani pri vytvarani laboratoria v moodli, ktory zprasujes a podla neho vytvoris formular pre vstupy
-	MyGlobalVars.get_settings().then(function(data){
-		//data.inputs je ten string
-		// funkcia myStringToArrayWithObjects ho prerobi na pole objekotv
-		$scope.inputs = myStringToArrayWithObjects.convert(data.inputs);
-	})
-
-	//precitaj formular a prepni sa do kontroleru pre priebeh experimentu
-	//ako vstu submitu je samotny formular
-	$scope.submit_input_form = function(form){
-		var obj = {}
-		obj["inputs"] = []
-
-		//precitaj inputy formu
-		angular.forEach(form.$$element[0].children,function(child){
-			if(child.name){
-				var inp = {};
-				inp[child.name] = child.value;
-				obj["inputs"].push(inp)
-			}
-		})
-		MyGlobalVars.get_settings().then(function(data){
-			//tu este prida do objektu potrebne parametre, prejde do kontroleru priebehu a cez socket posle serveru udaje na spustenie simulacie
-			obj["logged_user"] = data.logged_user;
-			obj["foldername"] = data.foldername;
-			obj["mfilepar"] = data.mfilepar;
-			obj["mfilescript"] = data.mfilescript;
-
-
-			$scope.ShowSection('priebeh');
-			$rootScope.$broadcast('spustiExperiment', obj);
-
-		})
-
-
-
-		// if($scope.v0 >= 0 && ($scope.alfa>=0 && $scope.alfa<=90)){
-		// 	//tento scope vie zavolat funkciu aj kontroleru pre sekcie lebo v html strukture je vnoreny
-		// 	$scope.ShowSection('priebeh');
-		// 	var obj = {};
-		// 	// obj["logged_user"]=MyGlobalVars.logged_user;
-		// 	// obj["foldername"]=MyGlobalVars.foldername;
-		// 	// obj["mfilepar"]=MyGlobalVars.mfilepar;
-		// 	// obj["mfilescript"]=MyGlobalVars.mfilescript;
-		// 	// obj["v0"]=$scope.v0;
-		// 	// obj["alfa"]=$scope.alfa;
-		// 	obj["inputs"] = []
-		// 	obj["inputs"].push({"v0":$scope.v0})
-		// 	obj["inputs"].push({"alfa":$scope.alfa})
-		// 	$rootScope.$broadcast('spustiExperiment', obj);
-		// }else{
-		// 	alert('uprav vstupne parametre');
-		// }
-	}
-})
 
 
 //kontroler pre tabulku s predoslimi simulaciami

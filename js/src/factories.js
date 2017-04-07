@@ -72,7 +72,10 @@ app.factory('socket', function ($rootScope) {
 //na na pole objektov [{"label":label,"name":name,....}]
 app.factory('myStringToArrayWithObjects',function(){
   return{
+
     convert:function(data){
+      try{
+      var BreakException = {};
       var inputs = [];
       var remove_new_lines = data.replace(/(\r\n|\n|\r)/gm,"");
       //odstrani z pola "" ktore prida replace o riadok vysiie
@@ -80,18 +83,29 @@ app.factory('myStringToArrayWithObjects',function(){
       angular.forEach(lines,function(line){
         var obj = {};
         var params = line.split(',');
-        obj["label"] = params[0];
-        obj["name"] = params[1];
-        obj["min"] = parseFloat(params[2]);
-        obj["max"] = parseFloat(params[3]);
-        if(params[4]){
-          obj["init"] = parseFloat(params[4]);
+        //iba ak vsetky existuju
+        if( (typeof params[0] == 'string') && (typeof params[1] == 'string')  && (isNaN(params[2]) == false)  && (isNaN(params[3]) == false)){
+          obj["label"] = params[0];
+          obj["name"] = params[1];
+          obj["min"] = parseFloat(params[2]);
+          obj["max"] = parseFloat(params[3]);
+          if(params[4]){
+            obj["init"] = parseFloat(params[4]);
+          }
+        }else{
+          throw BreakException;
         }
+
         inputs.push(obj);
 
-      })
+      }) 
 
       return inputs;
+      }catch(e){
+          return 'wrong input structure';
+        }
+
     }
-  }
+
+    }
 });
