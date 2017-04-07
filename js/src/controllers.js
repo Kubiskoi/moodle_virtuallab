@@ -59,10 +59,10 @@ app.controller('ExperimentCtrl',function($scope,$http,MyGlobalVars,$rootScope,my
 		obj["inputs"] = []
 
 		//precitaj inputy formu
-		angular.forEach(form.$$element[0].children,function(child){
-			if(child.name){
+		angular.forEach(form.$$element[0].children[0].children,function(child){
+			if(child.children[1]){
 				var inp = {};
-				inp[child.name] = child.value;
+				inp[child.children[1].name] = child.children[1].value;
 				obj["inputs"].push(inp)
 			}
 		})

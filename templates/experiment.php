@@ -16,9 +16,16 @@
 			<h3>Vstupy</h3>
 			<p ng-show="wrong_input_format_notice_show">Inpust incorrectly formatted!</p>
 			<form name="jh_inpust_form" ng-submit="submit_input_form(jh_inpust_form)">
-				<input ng-repeat-start="input in inputs" type="number" name={{input.name}} placeholder="{{input.label}}" ng-value="{{input.init}}" min="{{input.min}}" max="{{input.max}}" step=any required>
-				<br ng-repeat-end>
-				<input ng-show="submitbu_show" type="submit" value="Save"/>
+				<ul class="form-style-1">
+					<li ng-repeat-start="input in inputs">
+						<label>{{input.label}} <span class="required">*</span></label>
+						<input class="field-divided"  type="number" name={{input.name}} placeholder="<{{input.min}},{{input.max}}>" ng-value="{{input.init}}" min="{{input.min}}" max="{{input.max}}" step=any required>
+					</li>
+					<div ng-repeat-end></div>
+				<li>
+					<input ng-show="submitbu_show" type="submit" value="Run"/>
+				</li>
+				</ul>
 			</form>
 		</div>
 	</div>
