@@ -1,0 +1,13 @@
+.jh-priebeh-graph_anim{
+    width: 75%;
+    float: left;
+}
+.jh-priebeh-table{
+    width: 25%;
+    height: 100px;
+    float: right;
+}
+
+.jh-table-output{
+	width: 100%;
+}

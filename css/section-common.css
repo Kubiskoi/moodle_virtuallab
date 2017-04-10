@@ -1,15 +1,26 @@
 /*spolocne css pre vsetky sekcie*/
+
+.jh-table {
+  border-collapse: collapse;
+}
+
+.jh-table th {
+  border-bottom: 1px solid;
+}
+.jh-table td, .jh-table th {
+  border-left: 1px solid;
+  padding: 5px 10px;
+}
+.jh-table td:first-child, .jh-table th:first-child {
+  border-left: none;
+}
+
+.jh-table tr:nth-child(even){
+	background-color: #eee;
+}
+
 .jh-section-wrapper{
-	margin-left: 20px;
-	float: left;
-	width: 100%;
-}
-.jh-experiment-text{
-	width: 75%;
-	float: left;
-}
-.jh-experiment-input{
-	width: 25%;
-	height: 100px;
-	float: right;
+    margin-left: 20px;
+    float: left;
+    width: 100%;
 }

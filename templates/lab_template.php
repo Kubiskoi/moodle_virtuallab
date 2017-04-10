@@ -23,6 +23,9 @@
 
 <!-- nacitanie css pre navigacnu cast -->
 <link rel="stylesheet" href="css/nav.css" type="text/css">
+<!-- nacitanie css pre sekcie -->
+<link rel="stylesheet" href="css/section-common.css" type="text/css">
+
 
 
 <div ng-app="myApp" ng-controller="SectionCtrl" class="jh-wrapper" ">
@@ -42,8 +45,6 @@
 		</p>
 	</div>
 	
-	<!-- nacitanie css pre sekcie -->
-	<link rel="stylesheet" href="css/section-common.css" type="text/css">
 
 
 	<?php

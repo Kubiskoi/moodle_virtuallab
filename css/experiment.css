@@ -83,3 +83,16 @@ select{
 .form-style-1 .required{
     color:red;
 }
+
+
+
+
+.jh-experiment-text{
+    width: 75%;
+    float: left;
+}
+.jh-experiment-input{
+    width: 25%;
+    height: 100px;
+    float: right;
+}
