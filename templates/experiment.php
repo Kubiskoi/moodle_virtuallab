@@ -23,7 +23,7 @@
 					</li>
 					<div ng-repeat-end></div>
 				<li>
-					<input ng-show="submitbu_show" type="submit" value="Run"/>
+					<input ng-show="submitbu_show" type="submit" value="Spustiť"/>
 				</li>
 				</ul>
 			</form>

@@ -55,24 +55,47 @@ app.controller('ExperimentCtrl',function($scope,$http,MyGlobalVars,$rootScope,my
 	//precitaj formular a prepni sa do kontroleru pre priebeh experimentu
 	//ako vstu submitu je samotny formular
 	$scope.submit_input_form = function(form){
-		var obj = {}
-		obj["inputs"] = []
+		var obj = {};
+		obj["inputs"] = [];
+
+		var input_out_of_range = false;
 
 		//precitaj inputy formu
 		angular.forEach(form.$$element[0].children[0].children,function(child){
 			if(child.children[1]){
-				var inp = {};
-				inp[child.children[1].name] = child.children[1].value;
-				obj["inputs"].push(inp)
+				//z pola inputov vyber aktualny child
+				var actual = $scope.inputs.filter(function(obj){
+					return obj.name == child.children[1].name;
+				})
+				//vezmi value z formularu
+				var val = child.children[1].value;
+				//over min a max
+				if((val >= actual[0].min) && (val <= actual[0].max)){
+					//ak ok sprav objekt
+					var inp = {};
+					inp[child.children[1].name] = val;
+					obj["inputs"].push(inp);
+				}else{
+					//inak prirad true pre pomocnu premennu
+					input_out_of_range = true;
+				}
 			}
 		})
+
+
+		//ak input_out_of_range bol z defaultneho false zmeneny na true, vypis hlasku a ukonci funkciu
+		//cize ani neodosle data na server
+		if(input_out_of_range){
+			alert('Input out of range!');
+			return;
+		}
+
 		MyGlobalVars.get_settings().then(function(data){
 			//tu este prida do objektu potrebne parametre, prejde do kontroleru priebehu a cez socket posle serveru udaje na spustenie simulacie
 			obj["logged_user"] = data.logged_user;
 			obj["foldername"] = data.foldername;
 			obj["mfilepar"] = data.mfilepar;
 			obj["mfilescript"] = data.mfilescript;
-
 
 			$scope.ShowSection('priebeh');
 			$rootScope.$broadcast('spustiExperiment', obj);
@@ -84,6 +107,7 @@ app.controller('ExperimentCtrl',function($scope,$http,MyGlobalVars,$rootScope,my
 
 //kontroler priebehu simulacie experimentu
 app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socket){
+	$scope.data = [{t:10,x:20,y:30,v:40,}];
 	
 	//ked sa resolvnu MyGlovalVars
 	MyGlobalVars.get_settings().then(function(data){
@@ -93,8 +117,9 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 		socket.init(data.ipadrs,data.port);
 
 		//toto je socket io zachytenie eventu, kde matlab server posiela data
-		socket.on('results back',function(data){
-			console.log(data);
+		//zachytavam len vysledky urcene mne
+		socket.on('results_for:'+data.logged_user,function(msg){
+			console.log(msg);
 			$scope.show_loading = false;
 
 		})
