@@ -106,8 +106,23 @@ app.controller('ExperimentCtrl',function($scope,$http,MyGlobalVars,$rootScope,my
 
 
 //kontroler priebehu simulacie experimentu
-app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socket){
-	$scope.data = [{t:10,x:20,y:30,v:40,}];
+app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socket,$interval){
+	$scope.t = [];
+	$scope.x = [];
+	$scope.y = [];
+	$scope.v = [];
+
+	//v ako view
+	$scope.vt = [];
+	$scope.vx = [];
+	$scope.vy = [];
+	$scope.vv = [];
+
+	var my_interval;
+	var int_start = false;
+	var index = 0;
+	$scope.tableshow = false;
+	
 	
 	//ked sa resolvnu MyGlovalVars
 	MyGlobalVars.get_settings().then(function(data){
@@ -119,9 +134,39 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 		//toto je socket io zachytenie eventu, kde matlab server posiela data
 		//zachytavam len vysledky urcene mne
 		socket.on('results_for:'+data.logged_user,function(msg){
-			console.log(msg);
+			// console.log(msg);
 			$scope.show_loading = false;
 
+			//ak je status running a time uz ma nejake hodnoty tak pripoj hodnotky k polu
+			if((msg.result.status == "running") && angular.isArray(msg.result.data.time)){
+				$scope.t = $scope.t.concat(msg.result.data.time);
+				$scope.x = $scope.x.concat(msg.result.data.x);
+				$scope.y = $scope.y.concat(msg.result.data.y);
+				$scope.v = $scope.v.concat(msg.result.data.vy);
+
+				//aby sa spustil len raz interval
+				// a tabulku tiez len raz zobrazime
+				if(!int_start){
+					$scope.tableshow = !$scope.tableshow;
+
+					my_interval = $interval(function(){
+						//tu si pocitam index
+						// zobrazujem polia vt,vx,vy a vv a pushujem do nich hodnoty z originalnych poli
+						//v 100 ms rozostupoch aby to vyzeralo plynulo, keby zobrazujem rovno prijate data
+						//tak to strasne rychlo naskace a vyzera to zle
+						if(index < $scope.t.length){
+							$scope.vt.push($scope.t[index]);
+							$scope.vx.push($scope.x[index]);
+							$scope.vy.push($scope.y[index]);
+							$scope.vv.push($scope.v[index]);
+							index++;
+						}else{
+							$interval.cancel(my_interval); 
+						}
+					},100);
+					int_start = !int_start;
+				}
+			}
 		})
 	})
 
