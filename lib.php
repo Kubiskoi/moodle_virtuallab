@@ -102,6 +102,7 @@ function virtuallab_add_instance(stdClass $virtuallab, mod_virtuallab_mod_form $
     $virtuallab->portdb = $mData->portdb;
     $virtuallab->inputs = $mData->inputs;
     $virtuallab->outputs = $mData->outputs;
+    $virtuallab->skipsamples = $mData->skipsamples;
 
     $virtuallab->id = $DB->insert_record('virtuallab', $virtuallab);
 
@@ -139,9 +140,7 @@ function virtuallab_update_instance(stdClass $virtuallab, mod_virtuallab_mod_for
    $virtuallab->portdb = $mData->portdb;
    $virtuallab->inputs = $mData->inputs;
    $virtuallab->outputs = $mData->outputs;
-
-
-
+   $virtuallab->skipsamples = $mData->skipsamples;
 
     $result = $DB->update_record('virtuallab', $virtuallab);
 

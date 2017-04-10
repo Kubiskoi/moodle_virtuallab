@@ -20,6 +20,7 @@ $id = $_GET['id'];
     $obj->ipdb = $virtuallab->ipdb;
     $obj->inputs = $virtuallab->inputs;
     $obj->outputs = $virtuallab->outputs;
+    $obj->skipsamples = $virtuallab->skipsamples;
 
 
 

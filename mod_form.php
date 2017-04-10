@@ -78,33 +78,30 @@ class mod_virtuallab_mod_form extends moodleform_mod {
         }
 
 
+
         $mform->addElement('text', 'mfilepar', 'Mfile for parameters');
         $mform->addRule('mfilepar', null, 'required', null, 'client');
-        $mform->setDefault('mfilepar', 'Sikmy_vrh_par');
 
         $mform->addElement('text', 'mfilescript', 'Mfile for script');
         $mform->addRule('mfilescript', null, 'required', null, 'client');
-        $mform->setDefault('mfilescript', 'projectile_sim');
 
         $mform->addElement('text', 'foldername', 'Folder Name on server');
         $mform->addRule('foldername', null, 'required', null, 'client');
-        $mform->setDefault('foldername', 'sikmy_vrh');
 
         $mform->addElement('text', 'ipadrs', 'IP Address of Matlab server');
         $mform->addRule('ipadrs', null, 'required', null, 'client');
-        $mform->setDefault('ipadrs', 'localhost');
 
         $mform->addElement('text', 'port', 'Port Matlab server');
         $mform->addRule('port', null, 'required', null, 'client');
-        $mform->setDefault('port', '3001');
 
         $mform->addElement('text', 'ipdb', 'IP Address of MongoDB');
         $mform->addRule('ipdb', null, 'required', null, 'client');
-        $mform->setDefault('ipdb', 'localhost');
 
         $mform->addElement('text', 'portdb', 'Port MongoDB');
         $mform->addRule('portdb', null, 'required', null, 'client');
-        $mform->setDefault('portdb', '27017');
+
+        $mform->addElement('text', 'skipsamples', 'Skip Samples');
+        $mform->addRule('skipsamples', null, 'required', null, 'client');
 
         //typ, meno, label,Fourth element here is a string or array of attributes
         $mform->addElement('textarea', 'inputs', 'Inputs', 'wrap="hard" rows="10" cols="50"');
@@ -119,6 +116,14 @@ class mod_virtuallab_mod_form extends moodleform_mod {
 
         
 
+        $mform->setDefault('mfilepar', 'Sikmy_vrh_par');
+        $mform->setDefault('mfilescript', 'projectile_sim');
+        $mform->setDefault('foldername', 'sikmy_vrh');
+        $mform->setDefault('ipadrs', 'localhost');
+        $mform->setDefault('port', '3001');
+        $mform->setDefault('ipdb', 'localhost');
+        $mform->setDefault('portdb', '27017');
+        $mform->setDefault('skipsamples', '20');
 
 
 

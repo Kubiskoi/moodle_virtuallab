@@ -14,6 +14,7 @@
         <FIELD NAME="mfilescript" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="mfile name for script"/>
         <FIELD NAME="ipadrs" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="ip adrs for matlab server"/>
         <FIELD NAME="ipdb" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="ip adrs for mongo database"/>
+        <FIELD NAME="skipsamples" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="how much samples skip in view"/>
         <FIELD NAME="port" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="port for matlab server"/>
         <FIELD NAME="portdb" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="port for mongo database"/>
         <FIELD NAME="intro" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="General introduction of the virtuallab activity"/>

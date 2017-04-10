@@ -121,11 +121,14 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 	var my_interval;
 	var int_start = false;
 	var index = 0;
+	var skip_samples;
 	$scope.tableshow = false;
 	
 	
 	//ked sa resolvnu MyGlovalVars
 	MyGlobalVars.get_settings().then(function(data){
+		//nadstav preskakovanie vzorkovania
+		skip_samples = data.skipsamples;
 		//nadstav cestu pre gif
 		$scope.path_to_loading_gif=data.path_to_loading_gif;
 		//inicializuj socket factory
@@ -159,7 +162,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 							$scope.vx.push($scope.x[index]);
 							$scope.vy.push($scope.y[index]);
 							$scope.vv.push($scope.v[index]);
-							index++;
+							index=index+skip_samples;
 						}else{
 							$interval.cancel(my_interval); 
 						}

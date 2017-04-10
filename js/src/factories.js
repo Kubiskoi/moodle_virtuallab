@@ -25,7 +25,8 @@ app.factory('MyGlobalVars', function($http,$q) {
             portdb: data.data.portdb,
             ipdb: data.data.ipdb,
             inputs: data.data.inputs,
-            outputs: data.data.outputs
+            outputs: data.data.outputs,
+            skipsamples:parseInt(data.data.skipsamples)
       })
   })
 
