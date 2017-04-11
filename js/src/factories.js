@@ -26,7 +26,8 @@ app.factory('MyGlobalVars', function($http,$q) {
             ipdb: data.data.ipdb,
             inputs: data.data.inputs,
             outputs: data.data.outputs,
-            skipsamples:parseInt(data.data.skipsamples)
+            //+1 preto lebo ak je preskakovanie samplov nadstavene na 0 tak by sa index vobec neposuval
+            skipsamples:(parseInt(data.data.skipsamples)+1)
       })
   })
 

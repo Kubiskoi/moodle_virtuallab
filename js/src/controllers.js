@@ -106,7 +106,8 @@ app.controller('ExperimentCtrl',function($scope,$http,MyGlobalVars,$rootScope,my
 
 
 //kontroler priebehu simulacie experimentu
-app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socket,$interval){
+app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socket,$interval,$timeout){
+
 	$scope.t = [];
 	$scope.x = [];
 	$scope.y = [];
@@ -123,6 +124,29 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 	var index = 0;
 	var skip_samples;
 	$scope.tableshow = false;
+	//do tohto pola si budem ukladat dlzku pola ktore sa zvacsuje s prijatymi datami
+	//ak poslednych x hodnot cize dlzok bude rovnakych tak viem ze  uz neprijmam nove data a viem pridat posledny hodnotu a ukoncit interval
+	var help_arr = [];
+	var that = this;
+
+
+		this.identical = function(array) {
+	    	for(var i = 0; i < array.length - 1; i++) {
+	    	    if(array[i] !== array[i+1]) {
+	    	        return false;
+	    	    }
+	    	}
+	    	return true;
+		}
+
+		//ak poslednych 15 je rovnakych
+		this.check_help_arr = function(arr){
+			var new_arr = arr.slice(arr.length-15,arr.length);
+			if(new_arr.length == 15 && that.identical(new_arr)){
+				return true;
+			}
+			return false;
+		}
 	
 	
 	//ked sa resolvnu MyGlovalVars
@@ -151,25 +175,50 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 				// a tabulku tiez len raz zobrazime
 				if(!int_start){
 					$scope.tableshow = !$scope.tableshow;
+					int_start = !int_start;
 
 					my_interval = $interval(function(){
+						help_arr.push($scope.t.length);
+						if(that.check_help_arr(help_arr)){
+								$scope.vt.push($scope.t[$scope.t.length - 1]);
+								$scope.vx.push($scope.x[$scope.x.length - 1]);
+								$scope.vy.push($scope.y[$scope.y.length - 1]);
+								$scope.vv.push($scope.v[$scope.v.length - 1]);
+
+								$interval.cancel(my_interval); 
+
+						}
 						//tu si pocitam index
 						// zobrazujem polia vt,vx,vy a vv a pushujem do nich hodnoty z originalnych poli
 						//v 100 ms rozostupoch aby to vyzeralo plynulo, keby zobrazujem rovno prijate data
 						//tak to strasne rychlo naskace a vyzera to zle
-						if(index < $scope.t.length){
-							$scope.vt.push($scope.t[index]);
-							$scope.vx.push($scope.x[index]);
-							$scope.vy.push($scope.y[index]);
-							$scope.vv.push($scope.v[index]);
-							index=index+skip_samples;
-						}else{
-							$interval.cancel(my_interval); 
-						}
-					},100);
-					int_start = !int_start;
+						// if(index < $scope.t.length){
+							
+							//pushni iba ak su nejaka data uz prijate
+							if(index < $scope.t.length){
+								$scope.vt.push($scope.t[index]);
+								$scope.vx.push($scope.x[index]);
+								$scope.vy.push($scope.y[index]);
+								$scope.vv.push($scope.v[index]);
+								index=index+skip_samples;
+							}
+						// }else{
+							//ak uz index je viac ako dlzka tak este pridaj poslednu
+						// 	$scope.vt.push($scope.t[$scope.t.length - 1]);
+						// 	$scope.vx.push($scope.x[$scope.x.length - 1]);
+						// 	$scope.vy.push($scope.y[$scope.y.length - 1]);
+						// 	$scope.vv.push($scope.v[$scope.v.length - 1]);
+						// 	$interval.cancel(my_interval); 
+						// }
+					},skip_samples*10);
 				}
 			}
+			//ked skonci vypocet timeout a zobrazovanie este bezi lebo vypocty su trochu rychlejsie, pockam 5 sekund a ukoncim my_interval
+			// if(msg.result.status == "stopped"){
+			// 	$timeout(function(){
+			// 		$interval.cancel(my_interval); 
+			// 	},5000);
+			// }
 		})
 	})
 
