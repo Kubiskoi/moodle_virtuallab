@@ -107,29 +107,37 @@ app.controller('ExperimentCtrl',function($scope,$http,MyGlobalVars,$rootScope,my
 
 //kontroler priebehu simulacie experimentu
 app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socket,$interval,$timeout){
+	//aby loading gif bol skovany
+	$scope.show_loading = false;
 
-	$scope.t = [];
-	$scope.x = [];
-	$scope.y = [];
-	$scope.v = [];
+	//kluce na ktorych su data, podla tohto je aj head tabulky
+	$scope.keys = [];
 
-	//v ako view
-	$scope.vt = [];
-	$scope.vx = [];
-	$scope.vy = [];
-	$scope.vv = [];
+	//riadky tabulky
+	$scope.data_to_display = [];
 
+	//objekt ktory na klucoch spaja prijate data
+	var cancated_obj = {};
+
+
+	//itvervalovo prechadzam spojene prijate data a vyberam hodnoty co idu do tabulky podla indexu
+	//index sa zavcsuje o tolko kolko bolo nasdstavene pri vytvarani virtual labu
 	var my_interval;
-	var int_start = false;
 	var index = 0;
 	var skip_samples;
+
+	//aby sa cast kodu vykonala len raz
+	var int_start = false;
+	
+	//tabulka je skovana na zaciatku
 	$scope.tableshow = false;
-	//do tohto pola si budem ukladat dlzku pola ktore sa zvacsuje s prijatymi datami
-	//ak poslednych x hodnot cize dlzok bude rovnakych tak viem ze  uz neprijmam nove data a viem pridat posledny hodnotu a ukoncit interval
+	
+	//do tohto pola si budem ukladat dlzku pola ktore sa zvacsuje s prijatymi datami, cas, lebo cas je pri kazdom experimente
+	//ak poslednych x hodnot cize dlzok bude rovnakych (pole sa uz nezvacsujes) tak viem ze  uz neprijmam nove data a viem pridat posledny hodnotu a ukoncit interval
 	var help_arr = [];
 	var that = this;
 
-
+		//funkcia vrati true ak je pole plne rovnakych prvkov
 		this.identical = function(array) {
 	    	for(var i = 0; i < array.length - 1; i++) {
 	    	    if(array[i] !== array[i+1]) {
@@ -139,10 +147,10 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 	    	return true;
 		}
 
-		//ak poslednych 15 je rovnakych
+		//ak poslednych 30 je rovnakych vrat true
 		this.check_help_arr = function(arr){
-			var new_arr = arr.slice(arr.length-15,arr.length);
-			if(new_arr.length == 15 && that.identical(new_arr)){
+			var new_arr = arr.slice(arr.length-30,arr.length);
+			if(new_arr.length == 30 && that.identical(new_arr)){
 				return true;
 			}
 			return false;
@@ -161,15 +169,24 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 		//toto je socket io zachytenie eventu, kde matlab server posiela data
 		//zachytavam len vysledky urcene mne
 		socket.on('results_for:'+data.logged_user,function(msg){
-			// console.log(msg);
+			//zobraz loading gif
 			$scope.show_loading = false;
 
 			//ak je status running a time uz ma nejake hodnoty tak pripoj hodnotky k polu
+			//time je v kazdom experimente
 			if((msg.result.status == "running") && angular.isArray(msg.result.data.time)){
-				$scope.t = $scope.t.concat(msg.result.data.time);
-				$scope.x = $scope.x.concat(msg.result.data.x);
-				$scope.y = $scope.y.concat(msg.result.data.y);
-				$scope.v = $scope.v.concat(msg.result.data.vy);
+				//zisti kluce, cize meno vracajucich sa vyslednych hodnot ako x,y,v atd..
+				$scope.keys = Object.keys(msg.result.data);
+				//pre kazdy kluc vytvor bojektu pole, ak uz ma pole tak k nemu pripoj novo prijate hodnoty
+				angular.forEach($scope.keys,function(key){
+					//ak na kulci key nie je pole sprav tam inak concatuj
+					if(!cancated_obj[key]){
+						cancated_obj[key] = [];
+					}else{
+						cancated_obj[key] = cancated_obj[key].concat(msg.result.data[key]);
+					}
+				})
+
 
 				//aby sa spustil len raz interval
 				// a tabulku tiez len raz zobrazime
@@ -177,54 +194,44 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 					$scope.tableshow = !$scope.tableshow;
 					int_start = !int_start;
 
+					//interval co prechadza pospajanymi polami hodnot
 					my_interval = $interval(function(){
-						help_arr.push($scope.t.length);
+						//do help_arr ukladaj dlzku pola casu
+						help_arr.push(cancated_obj["time"].length);
+						//ak toto pole ma uz na poslednych x miestach rovnaku hodnotu, viem ze neprijmam uz nove hodnoty
+						//a mozem pripojit poslednu hodnotu a ukoncit interval
 						if(that.check_help_arr(help_arr)){
-								$scope.vt.push($scope.t[$scope.t.length - 1]);
-								$scope.vx.push($scope.x[$scope.x.length - 1]);
-								$scope.vy.push($scope.y[$scope.y.length - 1]);
-								$scope.vv.push($scope.v[$scope.v.length - 1]);
-
-								$interval.cancel(my_interval); 
+							var obj = {};
+							angular.forEach($scope.keys,function(key){
+								obj[key] = cancated_obj[key][cancated_obj[key].length-1];
+							})
+							//pushni posledny riadok tabulky
+							$scope.data_to_display.push(obj);
+							//ukonci interval
+							$interval.cancel(my_interval); 
 
 						}
-						//tu si pocitam index
-						// zobrazujem polia vt,vx,vy a vv a pushujem do nich hodnoty z originalnych poli
-						//v 100 ms rozostupoch aby to vyzeralo plynulo, keby zobrazujem rovno prijate data
-						//tak to strasne rychlo naskace a vyzera to zle
-						// if(index < $scope.t.length){
-							
-							//pushni iba ak su nejaka data uz prijate
-							if(index < $scope.t.length){
-								$scope.vt.push($scope.t[index]);
-								$scope.vx.push($scope.x[index]);
-								$scope.vy.push($scope.y[index]);
-								$scope.vv.push($scope.v[index]);
+						
+							//ak sa index nachadza v prijatom poli case, cize mam co zobrazovat
+							if(index < cancated_obj["time"].length){
+								//do pomocneho objektu
+								//podla klucov prirad hodnotu z pola prijatych a pospajanych dat
+								var obj = {};
+								angular.forEach($scope.keys,function(key){
+									obj[key] = cancated_obj[key][index];
+								})
+								//pushni ako riadok do tabulky
+								$scope.data_to_display.push(obj)
+								//zvacsi index
 								index=index+skip_samples;
 							}
-						// }else{
-							//ak uz index je viac ako dlzka tak este pridaj poslednu
-						// 	$scope.vt.push($scope.t[$scope.t.length - 1]);
-						// 	$scope.vx.push($scope.x[$scope.x.length - 1]);
-						// 	$scope.vy.push($scope.y[$scope.y.length - 1]);
-						// 	$scope.vv.push($scope.v[$scope.v.length - 1]);
-						// 	$interval.cancel(my_interval); 
-						// }
 					},skip_samples*10);
 				}
 			}
-			//ked skonci vypocet timeout a zobrazovanie este bezi lebo vypocty su trochu rychlejsie, pockam 5 sekund a ukoncim my_interval
-			// if(msg.result.status == "stopped"){
-			// 	$timeout(function(){
-			// 		$interval.cancel(my_interval); 
-			// 	},5000);
-			// }
 		})
 	})
 
-	//aby loading gif bol skovany
-	$scope.show_loading = false;
-	var that = this;
+	
 	//$on je na eventy v angulare, tento event pride z kontroleru experimentu, kde po zadani vstupnych hodnot sa spusti simulacia
 	$rootScope.$on('spustiExperiment', function(event, args) {
 		//zobraz loading gif

@@ -14,27 +14,14 @@
 					<table ng-show="tableshow" class="jh-table jh-table-output">
 						<thead>
 							<tr>
-								<th>t</th>
-								<th>x</th>
-								<th>y</th>
-								<th>v</th>
+								<th ng-repeat="key in keys">{{key}}</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="val in vt track by $index">
-								<td>{{val}}</td>
-								<td>{{vx[$index]}}</td>
-								<td>{{vy[$index]}}</td>
-								<td>{{vv[$index]}}</td>
+							<tr ng-repeat="row in data_to_display">
+								<td ng-repeat="(key,value) in row">{{value}}</td>
 							</tr>
-			<!-- 				<tr ng-repeat="val in t track by $index">
-								<td>{{val}}</td>
-								<td>{{x[$index]}}</td>
-								<td>{{y[$index]}}</td>
-								<td>{{v[$index]}}</td>
-							</tr>
-			 -->			</tbody>
-
+						</tbody>
 					</table>
 			</div>
 		</div>
