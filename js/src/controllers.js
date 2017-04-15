@@ -106,7 +106,7 @@ app.controller('ExperimentCtrl',function($scope,$http,MyGlobalVars,$rootScope,my
 
 
 //kontroler priebehu simulacie experimentu
-app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socket,$interval,$timeout){
+app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socket,$interval,$timeout,$httpParamSerializerJQLike){
 	//aby loading gif bol skovany
 	$scope.show_loading = false;
 
@@ -159,6 +159,10 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 	
 	//ked sa resolvnu MyGlovalVars
 	MyGlobalVars.get_settings().then(function(data){
+		var ipdb = data.ipdb;
+		var portdb = data.portdb;
+		var username = data.logged_user;
+		var experiment_foldername = data.foldername;
 		//nadstav preskakovanie vzorkovania
 		skip_samples = data.skipsamples;
 		//nadstav cestu pre gif
@@ -208,7 +212,25 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 							//pushni posledny riadok tabulky
 							$scope.data_to_display.push(obj);
 							//ukonci interval
-							$interval.cancel(my_interval); 
+							$interval.cancel(my_interval);
+
+							//savenmi do databazy
+							var date = new Date();
+							var req = {
+								method: 'POST',
+								url: 'mongo_scripts/save_to_db.php',
+								headers: {
+							   		'Content-Type': 'application/x-www-form-urlencoded'
+								},
+							 	params: {ipdb:ipdb,portdb:portdb},
+							 	data: $httpParamSerializerJQLike({"username":username,"experiment":experiment_foldername,"executed":date.toLocaleString('en-GB'),"pole_test":['1','2','3']})
+							}
+							$http(req).then(function(data){
+								console.log('saved to db');
+							},function(err){
+								alert('Error on saving to database!');
+							})
+
 
 						}
 						
@@ -266,7 +288,7 @@ app.controller('PredosleVysledkyCtrl',function($scope,$http,$rootScope,MyGlobalV
 				headers: {
 			   		'Content-Type': 'application/x-www-form-urlencoded'
 				},
-			 	params: {ipdb:data.ipdb,portdb:data.portdb}
+			 	params: {ipdb:data.ipdb,portdb:data.portdb,username:data.logged_user,expname:data.foldername}
 			}
 			//getuj data z db
 			// Simple GET request example:

@@ -11,13 +11,15 @@
 					<th>Experiment</th>
 					<th>Dátum</th>
 					<th>Akcie</th>
+					<th>user</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="experiment in data | orderBy:'-executed'">
 					<td>{{experiment.experiment}}</td>
 					<td>{{experiment.executed | date: 'dd.MM.yyyy hh:mm'}}</td>	
-					<td>x</td>				
+					<td>x</td>	
+					<td>{{experiment.username}}</td>
 				</tr>
 			</tbody>
 		</table>		
