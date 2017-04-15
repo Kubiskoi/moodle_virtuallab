@@ -216,6 +216,13 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 							//savenmi do databazy
 							var date = new Date();
+							var obj_to_save = {"username":username,"experiment":experiment_foldername,"executed":date.toLocaleString('en-GB'),"keys":$scope.keys};
+							angular.forEach($scope.keys,function(key){
+								//dam ich do stringu lebo limit postu pre pocet inputov je na MAMP 1000 a neviem kolko ma FEI moodle
+								//http://stackoverflow.com/questions/2341149/limit-of-post-arguments-in-html-or-php
+								obj_to_save[key] = JSON.stringify(cancated_obj[key]);
+							})
+							console.log(obj_to_save);
 							var req = {
 								method: 'POST',
 								url: 'mongo_scripts/save_to_db.php',
@@ -223,10 +230,9 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 							   		'Content-Type': 'application/x-www-form-urlencoded'
 								},
 							 	params: {ipdb:ipdb,portdb:portdb},
-							 	data: $httpParamSerializerJQLike({"username":username,"experiment":experiment_foldername,"executed":date.toLocaleString('en-GB'),"pole_test":['1','2','3']})
+							 	data: $httpParamSerializerJQLike(obj_to_save)
 							}
 							$http(req).then(function(data){
-								console.log('saved to db');
 							},function(err){
 								alert('Error on saving to database!');
 							})
@@ -295,7 +301,6 @@ app.controller('PredosleVysledkyCtrl',function($scope,$http,$rootScope,MyGlobalV
 			$http(req).then(function successCallback(response) {
 				// this callback will be called asynchronously
 				// when the response is available
-				// console.log(response.data);
 				self.data = [];
 				self.data = response.data;
 			}, function errorCallback(response) {

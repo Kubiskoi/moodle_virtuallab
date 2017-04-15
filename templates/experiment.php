@@ -5,7 +5,6 @@
 	<div class="jh-section-wrapper">
 		<div class="jh-experiment-text">
 			<h3>Experiment - <?php echo $virtuallab->name;?></h3> 
-			<button ng-click="testbut()">test</button>
 			<?php
 				if ($virtuallab->intro) {
 				    echo $OUTPUT->box(format_module_intro('virtuallab', $virtuallab, $cm->id), 'generalbox mod_introbox', 'virtuallabintro');
