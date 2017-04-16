@@ -1,10 +1,11 @@
 TODO
 grafy
 animaciu
-ukladanie do DB - prorobit
+
 mazanie z db
 stahovanie do suboru
 prebehnut uz ulozene data
+fixnut ked idem spravit dalsiu simulaciu a nereloadnem, skovaj tabulku a vymaz data
 
 spravit druhy experiment
 

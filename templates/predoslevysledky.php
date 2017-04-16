@@ -18,7 +18,7 @@
 				<tr ng-repeat="experiment in data | orderBy:'-executed'">
 					<td>{{experiment.experiment}}</td>
 					<td>{{experiment.executed | date: 'dd.MM.yyyy hh:mm'}}</td>	
-					<td>x</td>	
+					<td><button ng-click="del_data(experiment._id,experiment.experiment,experiment.executed | date: 'dd.MM.yyyy hh:mm')">del</button></td>	
 					<td>{{experiment.username}}</td>
 				</tr>
 			</tbody>

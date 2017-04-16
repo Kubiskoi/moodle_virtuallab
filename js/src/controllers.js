@@ -223,7 +223,6 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 								obj_to_save[key] = cancated_obj[key];
 								// obj_to_save[key] = JSON.stringify(cancated_obj[key]);
 							})
-							console.log(obj_to_save);
 							var req = {
 								method: 'POST',
 								url: 'mongo_scripts/save_to_db.php',
@@ -268,6 +267,10 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 		$scope.show_loading = true;
 		//odosli vstupne parametre na matlabovky server
 		socket.emit('input parameters', args);
+
+		//tu budem premazav a skovavat
+		//keys a dalsie
+		console.log(cancated_obj);
 	})
 	
 	
@@ -284,11 +287,16 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 app.controller('PredosleVysledkyCtrl',function($scope,$http,$rootScope,MyGlobalVars){
 	var self = $scope;
 	var that = this;
+	var ipdb;
+	var portdb;
 	
 	//nacitaj predosle simulacie z databazy
 	this.loadResults = function(){
+		
 		//z MyGlobalVars zisti ipadresu a port databazy
 		MyGlobalVars.get_settings().then(function(data){
+			ipdb = data.ipdb;
+			portdb = data.portdb;
 
 			var req = {
 				method: 'GET',
@@ -296,7 +304,7 @@ app.controller('PredosleVysledkyCtrl',function($scope,$http,$rootScope,MyGlobalV
 				headers: {
 			   		'Content-Type': 'application/x-www-form-urlencoded'
 				},
-			 	params: {ipdb:data.ipdb,portdb:data.portdb,username:data.logged_user,expname:data.foldername}
+			 	params: {ipdb:ipdb,portdb:portdb,username:data.logged_user,expname:data.foldername}
 			}
 			//getuj data z db
 			// Simple GET request example:
@@ -305,7 +313,6 @@ app.controller('PredosleVysledkyCtrl',function($scope,$http,$rootScope,MyGlobalV
 				// when the response is available
 				self.data = [];
 				self.data = response.data;
-				console.log(response.data);
 			}, function errorCallback(response) {
 				self.data = [];
 				// called asynchronously if an error occurs
@@ -315,11 +322,28 @@ app.controller('PredosleVysledkyCtrl',function($scope,$http,$rootScope,MyGlobalV
 		})	
 	}
 
-
 	this.loadResults();
 	// zachyti event z kontroleru sekcii a spravi dotaz na server nech vrati udaje z databazy
 	$rootScope.$on('reloadPredosle', function(event, args) {
 		that.loadResults();
 	});
+
+
+	$scope.del_data = function(_id,name,date){
+		if(confirm("Vymazať simulaciu: "+name+", "+date+" ?")){
+			var req = {
+				method: 'GET',
+				url: 'mongo_scripts/del_sim.php',
+				headers: {
+			   		'Content-Type': 'application/x-www-form-urlencoded'
+				},
+			 	params: {ipdb:ipdb,portdb:portdb,id:_id}
+			}
+			$http(req).then(function(data){
+				that.loadResults();
+			},function(err){});
+
+		}
+	}
 
 })
