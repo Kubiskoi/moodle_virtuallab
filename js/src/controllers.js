@@ -268,9 +268,14 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 		//odosli vstupne parametre na matlabovky server
 		socket.emit('input parameters', args);
 
-		//tu budem premazav a skovavat
-		//keys a dalsie
-		console.log(cancated_obj);
+		//nadstav na pociatocne hodnoty
+		cancated_obj = {};
+		$scope.keys = [];
+		$scope.data_to_display = [];
+		index = 0;
+		int_start = false;
+		$scope.tableshow = false;
+		help_arr = [];
 	})
 	
 	
@@ -345,5 +350,65 @@ app.controller('PredosleVysledkyCtrl',function($scope,$http,$rootScope,MyGlobalV
 
 		}
 	}
+
+	$scope.save_data = function(id){
+		var result = $scope.data.filter(function( obj ) {
+		  return obj._id == id;
+		});
+		var res = result[0];
+		var name = res.experiment+" "+res.executed;
+		var data_to_csv = [res.keys];
+		//vsetky polia su rovnako dlhe
+		for(var i = 0;i < res[res.keys[0]].length;i++){
+			var tmp = [];
+			for(var j = 0;j < res.keys.length;j++){
+				tmp.push(res[res.keys[j]][i]);
+			}
+			data_to_csv.push(tmp);
+		}
+		that.exportToCsv(name,data_to_csv);
+	}
+
+	//http://stackoverflow.com/questions/14964035/how-to-export-javascript-array-info-to-csv-on-client-side
+	this.exportToCsv = function(filename, rows) {
+	        var processRow = function (row) {
+	            var finalVal = '';
+	            for (var j = 0; j < row.length; j++) {
+	                var innerValue = row[j] === null ? '' : row[j].toString();
+	                if (row[j] instanceof Date) {
+	                    innerValue = row[j].toLocaleString();
+	                };
+	                var result = innerValue.replace(/"/g, '""');
+	                if (result.search(/("|,|\n)/g) >= 0)
+	                    result = '"' + result + '"';
+	                if (j > 0)
+	                    finalVal += ',';
+	                finalVal += result;
+	            }
+	            return finalVal + '\n';
+	        };
+
+	        var csvFile = '';
+	        for (var i = 0; i < rows.length; i++) {
+	            csvFile += processRow(rows[i]);
+	        }
+
+	        var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
+	        if (navigator.msSaveBlob) { // IE 10+
+	            navigator.msSaveBlob(blob, filename);
+	        } else {
+	            var link = document.createElement("a");
+	            if (link.download !== undefined) { // feature detection
+	                // Browsers that support HTML5 download attribute
+	                var url = URL.createObjectURL(blob);
+	                link.setAttribute("href", url);
+	                link.setAttribute("download", filename);
+	                link.style.visibility = 'hidden';
+	                document.body.appendChild(link);
+	                link.click();
+	                document.body.removeChild(link);
+	            }
+	        }
+	    }
 
 })

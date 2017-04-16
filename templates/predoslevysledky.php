@@ -1,6 +1,6 @@
 <!-- nacitanie css pre cast predoslich vysledkov -->
-<!-- <link rel="stylesheet" href="css/predoslevysledky.css" type="text/css">
- -->
+<link rel="stylesheet" href="css/predoslevysledky.css" type="text/css">
+
 <div ng-show="isSectionShown('predosle')" class="jh-section-content" ng-controller="PredosleVysledkyCtrl">
 	<div class="jh-section-wrapper">
 		<h3>Predošlé výsledky</h3>
@@ -18,7 +18,10 @@
 				<tr ng-repeat="experiment in data | orderBy:'-executed'">
 					<td>{{experiment.experiment}}</td>
 					<td>{{experiment.executed | date: 'dd.MM.yyyy hh:mm'}}</td>	
-					<td><button ng-click="del_data(experiment._id,experiment.experiment,experiment.executed | date: 'dd.MM.yyyy hh:mm')">del</button></td>	
+					<td>
+						<button class="actions_butt" ng-click="save_data(experiment._id)">Ulož</button>
+						<button class="actions_butt" ng-click="del_data(experiment._id,experiment.experiment,experiment.executed | date: 'dd.MM.yyyy hh:mm')">Vymaž</button>
+					</td>	
 					<td>{{experiment.username}}</td>
 				</tr>
 			</tbody>

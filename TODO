@@ -2,10 +2,10 @@ TODO
 grafy
 animaciu
 
-mazanie z db
 stahovanie do suboru
 prebehnut uz ulozene data
-fixnut ked idem spravit dalsiu simulaciu a nereloadnem, skovaj tabulku a vymaz data
+ci sa data ukladaju do databazy
+.time !! co ked si nazve aj t?
 
 spravit druhy experiment
 
