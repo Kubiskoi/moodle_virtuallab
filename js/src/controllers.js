@@ -106,7 +106,7 @@ app.controller('ExperimentCtrl',function($scope,$http,MyGlobalVars,$rootScope,my
 
 
 //kontroler priebehu simulacie experimentu
-app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socket,$interval,$timeout,$httpParamSerializerJQLike){
+app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socket,$interval,$timeout){
 	//aby loading gif bol skovany
 	$scope.show_loading = false;
 
@@ -220,17 +220,19 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 							angular.forEach($scope.keys,function(key){
 								//dam ich do stringu lebo limit postu pre pocet inputov je na MAMP 1000 a neviem kolko ma FEI moodle
 								//http://stackoverflow.com/questions/2341149/limit-of-post-arguments-in-html-or-php
-								obj_to_save[key] = JSON.stringify(cancated_obj[key]);
+								obj_to_save[key] = cancated_obj[key];
+								// obj_to_save[key] = JSON.stringify(cancated_obj[key]);
 							})
 							console.log(obj_to_save);
 							var req = {
 								method: 'POST',
 								url: 'mongo_scripts/save_to_db.php',
-								headers: {
-							   		'Content-Type': 'application/x-www-form-urlencoded'
-								},
+								// headers: {
+							 //   		'Content-Type': 'application/x-www-form-urlencoded'
+								// },
 							 	params: {ipdb:ipdb,portdb:portdb},
-							 	data: $httpParamSerializerJQLike(obj_to_save)
+							 	data: obj_to_save
+							 	// data: $httpParamSerializerJQLike(obj_to_save)
 							}
 							$http(req).then(function(data){
 							},function(err){
@@ -303,6 +305,7 @@ app.controller('PredosleVysledkyCtrl',function($scope,$http,$rootScope,MyGlobalV
 				// when the response is available
 				self.data = [];
 				self.data = response.data;
+				console.log(response.data);
 			}, function errorCallback(response) {
 				self.data = [];
 				// called asynchronously if an error occurs
