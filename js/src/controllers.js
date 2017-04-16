@@ -176,9 +176,8 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 			//zobraz loading gif
 			$scope.show_loading = false;
 
-			//ak je status running a time uz ma nejake hodnoty tak pripoj hodnotky k polu
-			//time je v kazdom experimente
-			if((msg.result.status == "running") && angular.isArray(msg.result.data.time)){
+			//ak je status running a prve pole z dat uz ma nejake hodnoty tak pripoj hodnotky k polu
+			if((msg.result.status == "running") && angular.isArray(msg.result.data[Object.keys(msg.result.data)[0]])){
 				//zisti kluce, cize meno vracajucich sa vyslednych hodnot ako x,y,v atd..
 				$scope.keys = Object.keys(msg.result.data);
 				//pre kazdy kluc vytvor bojektu pole, ak uz ma pole tak k nemu pripoj novo prijate hodnoty
