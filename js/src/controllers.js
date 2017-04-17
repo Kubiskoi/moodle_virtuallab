@@ -194,13 +194,13 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 				//aby sa spustil len raz interval
 				// a tabulku tiez len raz zobrazime
 				if(!int_start){
-					$scope.tableshow = !$scope.tableshow;
-					int_start = !int_start;
+					$scope.tableshow = true;
+					int_start = true;
 
 					//interval co prechadza pospajanymi polami hodnot
 					my_interval = $interval(function(){
-						//do help_arr ukladaj dlzku pola casu
-						help_arr.push(cancated_obj["time"].length);
+						//do help_arr ukladaj dlzku je jedno akeho pola
+						help_arr.push(cancated_obj[$scope.keys[0]].length);
 						//ak toto pole ma uz na poslednych x miestach rovnaku hodnotu, viem ze neprijmam uz nove hodnoty
 						//a mozem pripojit poslednu hodnotu a ukoncit interval
 						if(that.check_help_arr(help_arr)){
@@ -240,8 +240,8 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 						}
 						
-							//ak sa index nachadza v prijatom poli case, cize mam co zobrazovat
-							if(index < cancated_obj["time"].length){
+							//ak sa index nachadza v prijatom poli cize mam co zobrazovat
+							if(index < cancated_obj[$scope.keys[0]].length){
 								//do pomocneho objektu
 								//podla klucov prirad hodnotu z pola prijatych a pospajanych dat
 								var obj = {};
@@ -276,8 +276,64 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 		$scope.tableshow = false;
 		help_arr = [];
 	})
-	
-	
+
+
+	//$on je na eventy v angulare, tento event pride z kontroleru predoslich
+	$rootScope.$on('zobrazUlozenyExperiment', function(event, args) {
+
+		// console.log(args);
+		MyGlobalVars.get_settings().then(function(data){
+			var skip_samples2 = data.skipsamples;
+			$scope.tableshow = true;
+			$scope.keys = args.keys;
+			index = 0;
+			$scope.data_to_display = [];
+			var my_interval2 = $interval(function(){
+
+				if(index < args[$scope.keys[0]].length){
+					//do pomocneho objektu
+					//podla klucov prirad hodnotu z pola prijatych a pospajanych dat
+					var obj = {};
+					angular.forEach($scope.keys,function(key){
+						obj[key] = args[key][index];
+					})
+					//pushni ako riadok do tabulky
+					$scope.data_to_display.push(obj)
+				index=index+skip_samples2;
+				}else{
+					var obj = {};
+					angular.forEach($scope.keys,function(key){
+						obj[key] = args[key][args[key].length-1];
+					})
+					//pushni posledny riadok tabulky
+					$scope.data_to_display.push(obj);
+					//ukonci interval
+					$interval.cancel(my_interval2);
+
+				}
+				
+			},skip_samples2*10);
+
+
+		})
+
+
+
+
+		// //zobraz loading gif
+		// $scope.show_loading = true;
+		// //odosli vstupne parametre na matlabovky server
+		// socket.emit('input parameters', args);
+
+		// //nadstav na pociatocne hodnoty
+		// cancated_obj = {};
+		// $scope.keys = [];
+		// $scope.data_to_display = [];
+		// index = 0;
+		// int_start = false;
+		// $scope.tableshow = false;
+		// help_arr = [];
+	})
 
 
 
@@ -351,11 +407,18 @@ app.controller('PredosleVysledkyCtrl',function($scope,$http,$rootScope,MyGlobalV
 	}
 
 	$scope.save_data = function(id){
+		//scope.data uchovava vsetky simulacie
+		//vyber podla idcka
 		var result = $scope.data.filter(function( obj ) {
 		  return obj._id == id;
 		});
+		//filter vracia pole prvkov ktore matchnu kriteria podla idcka cize len jeden
+		//preto na nultej pozicii
 		var res = result[0];
+		//meno podla mena experimentu
+		//a casu nasimulovania
 		var name = res.experiment+" "+res.executed;
+		//prvy riadok csv su mena stlpcov
 		var data_to_csv = [res.keys];
 		//vsetky polia su rovnako dlhe
 		for(var i = 0;i < res[res.keys[0]].length;i++){
@@ -409,5 +472,18 @@ app.controller('PredosleVysledkyCtrl',function($scope,$http,$rootScope,MyGlobalV
 	            }
 	        }
 	    }
+
+	$scope.show_data = function(id){
+		//scope.data uchovava vsetky simulacie
+		//vyber podla idcka
+		var result = $scope.data.filter(function( obj ) {
+		  return obj._id == id;
+		});
+		//filter vracia pole prvkov ktore matchnu kriteria podla idcka cize len jeden
+		//preto na nultej pozicii
+		var res = result[0];
+		$scope.ShowSection('priebeh');
+		$rootScope.$broadcast('zobrazUlozenyExperiment', res);
+	}
 
 })
