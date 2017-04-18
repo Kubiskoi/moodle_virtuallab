@@ -2,7 +2,7 @@
 //nieco ako router
 app.controller('SectionCtrl', function($scope,$rootScope) {
 	//na zaciatku chcem aby bola viditelna sekcia "experiment"
-	$scope.SectionSelected = "experiment";
+	$scope.SectionSelected = "priebeh";
 	
 	//ng-click="ShowSection('priebeh')" tato funkcia nastavi aktualne zobrazenu funkciu
 	$scope.ShowSection = function(whichSection){
@@ -106,7 +106,11 @@ app.controller('ExperimentCtrl',function($scope,$http,MyGlobalVars,$rootScope,my
 
 
 //kontroler priebehu simulacie experimentu
-app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socket,$interval,$timeout){
+app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socket,$interval,$timeout,myChart){
+
+	//pole grafov
+	$scope.charts = [];
+
 	//aby loading gif bol skovany
 	$scope.show_loading = false;
 
@@ -159,6 +163,13 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 	
 	//ked sa resolvnu MyGlovalVars
 	MyGlobalVars.get_settings().then(function(data){
+		//z kazdeho outputu vytvor graf
+		angular.forEach(data.outputs,function(output){
+			$scope.charts.push(new myChart(output));
+		})
+
+
+
 		var ipdb = data.ipdb;
 		var portdb = data.portdb;
 		var username = data.logged_user;
@@ -210,6 +221,12 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 							})
 							//pushni posledny riadok tabulky
 							$scope.data_to_display.push(obj);
+
+							//daj hodnotu aj grafom
+							angular.forEach($scope.charts,function(chart){
+								chart.push_new_val(obj);
+							});
+
 							//ukonci interval
 							$interval.cancel(my_interval);
 
@@ -250,6 +267,12 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 								})
 								//pushni ako riadok do tabulky
 								$scope.data_to_display.push(obj)
+
+								//daj hodnotu aj grafom
+								angular.forEach($scope.charts,function(chart){
+									chart.push_new_val(obj);
+								});
+
 								//zvacsi index
 								index=index+skip_samples;
 							}
@@ -275,14 +298,24 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 		int_start = false;
 		$scope.tableshow = false;
 		help_arr = [];
+
+		//resetuj grafy
+		angular.forEach($scope.charts,function(chart){
+			chart.reset();
+		});
 	})
 
 
 	//$on je na eventy v angulare, tento event pride z kontroleru predoslich
 	$rootScope.$on('zobrazUlozenyExperiment', function(event, args) {
+		//resetuj grafy
+		angular.forEach($scope.charts,function(chart){
+			chart.reset();
+		});
 
-		// console.log(args);
+
 		MyGlobalVars.get_settings().then(function(data){
+
 			var skip_samples2 = data.skipsamples;
 			$scope.tableshow = true;
 			$scope.keys = args.keys;
@@ -290,6 +323,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 			$scope.data_to_display = [];
 			var my_interval2 = $interval(function(){
 
+				//ak je index v poli
 				if(index < args[$scope.keys[0]].length){
 					//do pomocneho objektu
 					//podla klucov prirad hodnotu z pola prijatych a pospajanych dat
@@ -298,8 +332,17 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 						obj[key] = args[key][index];
 					})
 					//pushni ako riadok do tabulky
-					$scope.data_to_display.push(obj)
-				index=index+skip_samples2;
+					$scope.data_to_display.push(obj);
+
+					//daj hodnotu aj grafom
+					angular.forEach($scope.charts,function(chart){
+						chart.push_new_val(obj);
+					});
+
+					index=index+skip_samples2;
+
+				
+				//ak nie je pridaj posledny prvok
 				}else{
 					var obj = {};
 					angular.forEach($scope.keys,function(key){
@@ -307,6 +350,12 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 					})
 					//pushni posledny riadok tabulky
 					$scope.data_to_display.push(obj);
+
+					//daj hodnotu aj grafom
+					angular.forEach($scope.charts,function(chart){
+						chart.push_new_val(obj);
+					});
+
 					//ukonci interval
 					$interval.cancel(my_interval2);
 

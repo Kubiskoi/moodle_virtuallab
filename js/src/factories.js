@@ -1,5 +1,5 @@
 // ziskaj nastavenia modulu, ktore sa nastavuju pri vytvarani a su ulozene v moodlovskej databaze
-app.factory('MyGlobalVars', function($http,$q) {
+app.factory('MyGlobalVars', function($http,$q,outputStringConvert) {
     var deferred = $q.defer();
     // $location nejde lebo nie je zapnuty HTML5 mode
     const id_of_virtuallab = parseInt(window.location.search.substring(4));
@@ -25,7 +25,7 @@ app.factory('MyGlobalVars', function($http,$q) {
             portdb: data.data.portdb,
             ipdb: data.data.ipdb,
             inputs: data.data.inputs,
-            outputs: data.data.outputs,
+            outputs: outputStringConvert.convert(data.data.outputs),
             //+1 preto lebo ak je preskakovanie samplov nadstavene na 0 tak by sa index vobec neposuval
             skipsamples:(parseInt(data.data.skipsamples)+1)
       })
@@ -111,3 +111,64 @@ app.factory('myStringToArrayWithObjects',function(){
 
     }
 });
+
+
+//konvertuje string x,y;
+//na na pole objektov [{"x_axis":x,"y_axis":y}]
+app.factory('outputStringConvert',function(){
+  return{
+
+    convert:function(data){
+      var outputs = [];
+      var remove_new_lines = data.replace(/(\r\n|\n|\r)/gm,"");
+      var lines = remove_new_lines.split(';').filter(function(n){ return n != "" });
+      angular.forEach(lines,function(line){
+        var obj = {};
+        var params = line.split(',');
+        obj["x_axis"] = params[0];
+        obj["y_axis"] = params[1];
+        obj["name"] = params[0]+params[1]
+        outputs.push(obj);
+      });
+      return outputs;
+    }
+
+    }
+});
+
+
+app.factory('myChart',function(){
+  
+
+  var Chart = function(output){
+    this.name = output.name;
+    this.x_axis = output.x_axis;
+    this.y_axis = output.y_axis;
+    this.data = [[]];
+    this.datasetOverride = [{ fill: false }];
+    this.options = {animation:{duration:0}};
+    this.labels = [];
+
+    this.push_new_val = function(val){
+      this.labels.push(val[this.x_axis]);
+      this.data[0].push(val[this.y_axis]);
+    }
+
+    this.reset = function(){
+      this.data = [[]];
+      this.labels = [];
+    }
+
+  };
+
+
+
+  return Chart;
+
+});
+
+
+
+
+
+

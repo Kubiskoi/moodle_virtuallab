@@ -86,7 +86,15 @@ echo $OUTPUT->header();
 //nacitanie angularu a dalsich js suborov, rand je tam preto aby sa neukladali do cache a videl som zmeny, lebo chrome si cacheoval a zmeny v kode sa neprejavovali
 // $PAGE->requires->js('/mod/virtuallab/js/lib/socketio.min.js');
 echo '<script type="text/javascript" src="/mod/virtuallab/js/lib/socketio.min.js"></script>';
-$PAGE->requires->js('/mod/virtuallab/js/lib/angular.min.js');
+
+// $PAGE->requires->js('/mod/virtuallab/js/lib/angular.min.js');
+echo '<script type="text/javascript" src="/mod/virtuallab/js/lib/angular.min.js"></script>';
+echo '<script type="text/javascript" src="/mod/virtuallab/js/lib/chart.min.js"></script>';
+echo '<script type="text/javascript" src="/mod/virtuallab/js/lib/angular-chart.min.js"></script>';
+
+
+// $PAGE->requires->js('/mod/virtuallab/js/lib/chart.min.js');
+// $PAGE->requires->js('/mod/virtuallab/js/lib/angular-chart.min.js');
 $PAGE->requires->js('/mod/virtuallab/js/src/app.js?ver='.rand());
 $PAGE->requires->js('/mod/virtuallab/js/src/factories.js?ver='.rand());
 $PAGE->requires->js('/mod/virtuallab/js/src/controllers.js?ver='.rand());

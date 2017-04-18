@@ -6,7 +6,9 @@
 		<h3>Priebeh experimentu</h3>
 		<img ng-src="{{path_to_loading_gif}}loading.gif" ng-show="show_loading">
 		<div class="jh-priebeh-graph_anim">
-		<p>graf a anim</p>
+		<div ng-show="tableshow">
+			<canvas ng-repeat="chart in charts" class="chart chart-line" chart-data="chart.data" chart-labels="chart.labels" chart-options="chart.options" chart-dataset-override="chart.datasetOverride"></canvas>
+ 		</div>
 			
 		</div>
 		<div class="jh-priebeh-table">

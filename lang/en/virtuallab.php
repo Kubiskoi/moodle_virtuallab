@@ -30,8 +30,8 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['inputshelp'] = 'label,name,min,max,init(optional);';
 $string['inputshelp_help'] = 'label,name,min,max,init(optional);';
-$string['outputshelp'] = 'x,y;';
-$string['outputshelp_help'] = 'x,y;';
+$string['outputshelp'] = 'x-axis,y-axis;';
+$string['outputshelp_help'] = 'x-axis,y-axis;';
 $string['modulename'] = 'Virtual Laboratory';
 $string['modulenameplural'] = 'virtuallabs';
 $string['modulename_help'] = 'Use the Virtual Lab module for experiment simulations.';
