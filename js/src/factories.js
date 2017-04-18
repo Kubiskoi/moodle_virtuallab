@@ -146,7 +146,19 @@ app.factory('myChart',function(){
     this.y_axis = output.y_axis;
     this.data = [[]];
     this.datasetOverride = [{ fill: false }];
-    this.options = {animation:{duration:0}};
+    this.options = {
+      animation:{duration:0},
+      scales:{
+        yAxes:[{scaleLabel:{
+          display : true,
+          labelString: this.y_axis,
+        }}],
+        xAxes:[{scaleLabel:{
+          display : true,
+          labelString: this.x_axis,
+        }}]
+      },
+    };
     this.labels = [];
 
     this.push_new_val = function(val){

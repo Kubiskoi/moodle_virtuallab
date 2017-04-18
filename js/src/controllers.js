@@ -2,7 +2,7 @@
 //nieco ako router
 app.controller('SectionCtrl', function($scope,$rootScope) {
 	//na zaciatku chcem aby bola viditelna sekcia "experiment"
-	$scope.SectionSelected = "priebeh";
+	$scope.SectionSelected = "experiment";
 	
 	//ng-click="ShowSection('priebeh')" tato funkcia nastavi aktualne zobrazenu funkciu
 	$scope.ShowSection = function(whichSection){

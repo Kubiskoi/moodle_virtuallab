@@ -7,7 +7,11 @@
 		<img ng-src="{{path_to_loading_gif}}loading.gif" ng-show="show_loading">
 		<div class="jh-priebeh-graph_anim">
 		<div ng-show="tableshow">
-			<canvas ng-repeat="chart in charts" class="chart chart-line" chart-data="chart.data" chart-labels="chart.labels" chart-options="chart.options" chart-dataset-override="chart.datasetOverride"></canvas>
+			<div ng-repeat="chart in charts">
+				<p>Graf závislosti <b>{{chart.y_axis}}</b> od <b>{{chart.x_axis}}</b></p>
+				<canvas class="chart chart-line" chart-data="chart.data" chart-labels="chart.labels" chart-options="chart.options" chart-dataset-override="chart.datasetOverride"></canvas>
+				<br>
+ 			</div>
  		</div>
 			
 		</div>
