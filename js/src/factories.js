@@ -1,5 +1,14 @@
 // ziskaj nastavenia modulu, ktore sa nastavuju pri vytvarani a su ulozene v moodlovskej databaze
 app.factory('MyGlobalVars', function($http,$q,outputStringConvert) {
+  var that = this;
+  // ak je skip 0 tak +1 ,ak je nadstavene na 0 tak by sa index vobec neposuval
+  this.inc = function(x){
+    if(x==0){
+      return 1;
+    }else{
+      return x;
+    }
+  }
     var deferred = $q.defer();
     // $location nejde lebo nie je zapnuty HTML5 mode
     const id_of_virtuallab = parseInt(window.location.search.substring(4));
@@ -26,8 +35,8 @@ app.factory('MyGlobalVars', function($http,$q,outputStringConvert) {
             ipdb: data.data.ipdb,
             inputs: data.data.inputs,
             outputs: outputStringConvert.convert(data.data.outputs),
-            //+1 preto lebo ak je preskakovanie samplov nadstavene na 0 tak by sa index vobec neposuval
-            skipsamples:(parseInt(data.data.skipsamples)+1)
+            // skipsamples:(parseInt(data.data.skipsamples)+1)
+            skipsamples:that.inc(parseInt(data.data.skipsamples))
       })
   })
 
@@ -162,6 +171,8 @@ app.factory('myChart',function(){
     this.labels = [];
 
     this.push_new_val = function(val){
+      //xove hodnoty davam do labels co by malo byt polda dokumentacie ok, ak by som chcel definovat [{x:val,y:val}] bol by to prerurosvany graf
+      //http://www.chartjs.org/docs/#line-chart-data-points 
       this.labels.push(val[this.x_axis]);
       this.data[0].push(val[this.y_axis]);
     }
