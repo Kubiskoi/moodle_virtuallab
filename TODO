@@ -1,13 +1,21 @@
 TODO
 grafy - uz pri prechadzani predoslich tak viem najst maxima a minima
 animaciu
+do projectile sim aby sa ulozila ipcka serveru
+
 
 
 
 spravit druhy experiment
+
+upravit manazera aby neslo api ked je unauthorize
 
 upravit starklab
 
 napisat pracu
 instalaciu
 pouzivanie
+
+odstranit prednadstavene hodnoty
+
+grafy sa vyrobia podla nastaeni outputu kazdy dostane vsetky data ale vybera si len tie co potrebuje

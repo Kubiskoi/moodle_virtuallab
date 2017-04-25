@@ -116,6 +116,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 	//kluce na ktorych su data, podla tohto je aj head tabulky
 	$scope.keys = [];
+	$scope.units = {};
 
 	//riadky tabulky
 	$scope.data_to_display = [];
@@ -170,6 +171,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 
 
+
 		var ipdb = data.ipdb;
 		var portdb = data.portdb;
 		var username = data.logged_user;
@@ -191,6 +193,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 			if((msg.result.status == "running") && angular.isArray(msg.result.data[Object.keys(msg.result.data)[0]])){
 				//zisti kluce, cize meno vracajucich sa vyslednych hodnot ako x,y,v atd..
 				$scope.keys = Object.keys(msg.result.data);
+				$scope.units = msg.result.units;
 				//pre kazdy kluc vytvor bojektu pole, ak uz ma pole tak k nemu pripoj novo prijate hodnoty
 				angular.forEach($scope.keys,function(key){
 					//ak na kulci key nie je pole sprav tam inak concatuj
@@ -224,7 +227,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 							//daj hodnotu aj grafom
 							angular.forEach($scope.charts,function(chart){
-								chart.push_new_val(obj);
+								chart.push_new_val(obj,$scope.units);
 							});
 
 							//ukonci interval
@@ -232,7 +235,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 							//savenmi do databazy
 							var date = new Date();
-							var obj_to_save = {"username":username,"experiment":experiment_foldername,"executed":date.toLocaleString('en-GB'),"keys":$scope.keys};
+							var obj_to_save = {"username":username,"experiment":experiment_foldername,"executed":date.toLocaleString('en-GB'),"keys":$scope.keys,"units":$scope.units};
 							angular.forEach($scope.keys,function(key){
 								//dam ich do stringu lebo limit postu pre pocet inputov je na MAMP 1000 a neviem kolko ma FEI moodle
 								//http://stackoverflow.com/questions/2341149/limit-of-post-arguments-in-html-or-php
@@ -270,7 +273,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 								//daj hodnotu aj grafom
 								angular.forEach($scope.charts,function(chart){
-									chart.push_new_val(obj);
+									chart.push_new_val(obj,$scope.units);
 								});
 
 								//zvacsi index
@@ -293,6 +296,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 		//nadstav na pociatocne hodnoty
 		cancated_obj = {};
 		$scope.keys = [];
+		$scope.units = {};
 		$scope.data_to_display = [];
 		index = 0;
 		int_start = false;
@@ -319,6 +323,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 			var skip_samples2 = data.skipsamples;
 			$scope.tableshow = true;
 			$scope.keys = args.keys;
+			$scope.units = args.units;
 			index = 0;
 			$scope.data_to_display = [];
 			var my_interval2 = $interval(function(){
@@ -336,7 +341,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 					//daj hodnotu aj grafom
 					angular.forEach($scope.charts,function(chart){
-						chart.push_new_val(obj);
+						chart.push_new_val(obj,$scope.units);
 					});
 
 					index=index+skip_samples2;
@@ -353,7 +358,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 					//daj hodnotu aj grafom
 					angular.forEach($scope.charts,function(chart){
-						chart.push_new_val(obj);
+						chart.push_new_val(obj,$scope.units);
 					});
 
 					//ukonci interval
@@ -467,8 +472,17 @@ app.controller('PredosleVysledkyCtrl',function($scope,$http,$rootScope,MyGlobalV
 		//meno podla mena experimentu
 		//a casu nasimulovania
 		var name = res.experiment+" "+res.executed;
+
 		//prvy riadok csv su mena stlpcov
-		var data_to_csv = [res.keys];
+		var data_to_csv = [];
+		var name_tmp = [];
+		angular.forEach(res.keys,function(key){
+			name_tmp.push(key+' ['+res.units[key]+']')
+		});
+
+		data_to_csv.push(name_tmp);
+
+		// var data_to_csv = [res.keys];
 		//vsetky polia su rovnako dlhe
 		for(var i = 0;i < res[res.keys[0]].length;i++){
 			var tmp = [];
@@ -522,6 +536,7 @@ app.controller('PredosleVysledkyCtrl',function($scope,$http,$rootScope,MyGlobalV
 	        }
 	    }
 
+	//tato funkcia sa vola po stlaceni tlactika zobraz
 	$scope.show_data = function(id){
 		//scope.data uchovava vsetky simulacie
 		//vyber podla idcka

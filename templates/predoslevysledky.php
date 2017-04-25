@@ -11,7 +11,7 @@
 					<th>Experiment</th>
 					<th>Dátum</th>
 					<th>Akcie</th>
-					<th>user</th>
+					<th>Užívateľ</th>
 				</tr>
 			</thead>
 			<tbody>

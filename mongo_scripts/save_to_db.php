@@ -4,7 +4,7 @@ include 'mongodb_conf.php';
 //http://stackoverflow.com/questions/18866571/receive-json-post-with-php
 $data = json_decode(file_get_contents('php://input'), true);
 
-$toSave = array('username' => $data["username"], 'experiment' => $data["experiment"],'executed' => $data["executed"],'keys' => $data["keys"]);
+$toSave = array('username' => $data["username"], 'experiment' => $data["experiment"],'executed' => $data["executed"],'keys' => $data["keys"],'units' => $data["units"]);
 foreach ($data["keys"] as $key) {
 	$toSave[$key]=$data[$key];
 }

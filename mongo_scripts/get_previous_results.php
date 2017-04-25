@@ -20,6 +20,7 @@ foreach ($result as $entry) {
         $genericObject->experiment = $entry['experiment'];
         $genericObject->executed = $entry['executed'];
         $genericObject->keys = $entry['keys'];
+        $genericObject->units = $entry['units'];
         foreach($entry['keys'] as $key){
             $genericObject->$key = $entry[$key];
         }

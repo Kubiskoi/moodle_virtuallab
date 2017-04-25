@@ -20,7 +20,7 @@
 					<table ng-show="tableshow" class="jh-table jh-table-output">
 						<thead>
 							<tr>
-								<th ng-repeat="key in keys">{{key}}</th>
+								<th ng-repeat="key in keys">{{key}} [{{units[key]}}]</th>
 							</tr>
 						</thead>
 						<tbody>

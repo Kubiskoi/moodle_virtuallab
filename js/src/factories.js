@@ -170,11 +170,14 @@ app.factory('myChart',function(){
     };
     this.labels = [];
 
-    this.push_new_val = function(val){
+    this.push_new_val = function(val,units){
+
       //xove hodnoty davam do labels co by malo byt polda dokumentacie ok, ak by som chcel definovat [{x:val,y:val}] bol by to prerurosvany graf
       //http://www.chartjs.org/docs/#line-chart-data-points 
       this.labels.push(val[this.x_axis]);
       this.data[0].push(val[this.y_axis]);
+      this.options.scales.xAxes[0].scaleLabel.labelString = this.x_axis + ' ['+units[this.x_axis]+']';
+      this.options.scales.yAxes[0].scaleLabel.labelString = this.y_axis + ' ['+units[this.y_axis]+']';
     }
 
     this.reset = function(){
