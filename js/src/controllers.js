@@ -96,6 +96,8 @@ app.controller('ExperimentCtrl',function($scope,$http,MyGlobalVars,$rootScope,my
 			obj["foldername"] = data.foldername;
 			obj["mfilepar"] = data.mfilepar;
 			obj["mfilescript"] = data.mfilescript;
+			obj["ipadrs"] = data.ipadrs;
+			obj["port"] = data.port;
 
 			$scope.ShowSection('priebeh');
 			$rootScope.$broadcast('spustiExperiment', obj);

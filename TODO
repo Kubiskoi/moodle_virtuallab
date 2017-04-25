@@ -1,7 +1,8 @@
 TODO
 grafy - uz pri prechadzani predoslich tak viem najst maxima a minima
 animaciu
-do projectile sim aby sa ulozila ipcka serveru
+
+spravit medzery medzi grafmi a odsunut tabulku
 
 
 
@@ -16,6 +17,6 @@ napisat pracu
 instalaciu
 pouzivanie
 
-odstranit prednadstavene hodnoty
+odstranit prednadstavene hodnoty v moodle formulare
 
 grafy sa vyrobia podla nastaeni outputu kazdy dostane vsetky data ale vybera si len tie co potrebuje
