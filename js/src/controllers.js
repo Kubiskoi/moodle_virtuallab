@@ -108,8 +108,11 @@ app.controller('ExperimentCtrl',function($scope,$http,MyGlobalVars,$rootScope,my
 
 
 //kontroler priebehu simulacie experimentu
-app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socket,$interval,$timeout,myChart){
+app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socket,$interval,$timeout,myChart,myCanvas){
 
+	//canvas pre animacie
+	var my_canvas;	
+	
 	//pole grafov
 	$scope.charts = [];
 
@@ -171,7 +174,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 			$scope.charts.push(new myChart(output));
 		})
 
-
+		my_canvas = new myCanvas(data.foldername);
 
 
 		var ipdb = data.ipdb;
@@ -237,12 +240,14 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 								chart.push_new_val(obj,$scope.units);
 							});
 
+							my_canvas.push_new_val(obj,$scope.units);
+
 							//ukonci interval
 							$interval.cancel(my_interval);
 
 							//savenmi do databazy
-							var date = new Date();
-							var obj_to_save = {"username":username,"experiment":experiment_foldername,"executed":date.toLocaleString('en-GB'),"keys":$scope.keys,"units":$scope.units};
+							var date = + new Date;
+							var obj_to_save = {"username":username,"experiment":experiment_foldername,"executed":date,"keys":$scope.keys,"units":$scope.units};
 							angular.forEach($scope.keys,function(key){
 								//dam ich do stringu lebo limit postu pre pocet inputov je na MAMP 1000 a neviem kolko ma FEI moodle
 								//http://stackoverflow.com/questions/2341149/limit-of-post-arguments-in-html-or-php
@@ -283,6 +288,8 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 									chart.push_new_val(obj,$scope.units);
 								});
 
+								my_canvas.push_new_val(obj,$scope.units);
+
 								//zvacsi index
 								index=index+skip_samples;
 							}
@@ -314,6 +321,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 		angular.forEach($scope.charts,function(chart){
 			chart.reset();
 		});
+		my_canvas.reset();
 	})
 
 
@@ -323,6 +331,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 		angular.forEach($scope.charts,function(chart){
 			chart.reset();
 		});
+		my_canvas.reset();
 
 
 		MyGlobalVars.get_settings().then(function(data){
@@ -350,6 +359,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 					angular.forEach($scope.charts,function(chart){
 						chart.push_new_val(obj,$scope.units);
 					});
+					my_canvas.push_new_val(obj,$scope.units);
 
 					index=index+skip_samples2;
 
@@ -367,6 +377,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 					angular.forEach($scope.charts,function(chart){
 						chart.push_new_val(obj,$scope.units);
 					});
+					my_canvas.push_new_val(obj,$scope.units);
 
 					//ukonci interval
 					$interval.cancel(my_interval2);
@@ -418,6 +429,7 @@ app.controller('PredosleVysledkyCtrl',function($scope,$http,$rootScope,MyGlobalV
 				// when the response is available
 				self.data = [];
 				self.data = response.data;
+				// console.log(response.data);
 			}, function errorCallback(response) {
 				self.data = [];
 				// called asynchronously if an error occurs
@@ -451,7 +463,7 @@ app.controller('PredosleVysledkyCtrl',function($scope,$http,$rootScope,MyGlobalV
 		}
 	}
 
-	$scope.save_data = function(id){
+	$scope.save_data = function(id,datum){
 		//scope.data uchovava vsetky simulacie
 		//vyber podla idcka
 		var result = $scope.data.filter(function( obj ) {
@@ -462,7 +474,7 @@ app.controller('PredosleVysledkyCtrl',function($scope,$http,$rootScope,MyGlobalV
 		var res = result[0];
 		//meno podla mena experimentu
 		//a casu nasimulovania
-		var name = res.experiment+" "+res.executed;
+		var name = res.experiment+" "+datum;
 
 		//prvy riadok csv su mena stlpcov
 		var data_to_csv = [];

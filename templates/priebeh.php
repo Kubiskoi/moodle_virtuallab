@@ -7,9 +7,11 @@
 		<img ng-src="{{path_to_loading_gif}}loading.gif" ng-show="show_loading">
 		<div class="jh-priebeh-graph_anim">
 		<div ng-show="tableshow">
+			<!-- canvas pre animaciu -->
+			<canvas id="jh-anim" width="600" height="400">Web browser doesn't support canvas.</canvas>
 			<div ng-repeat="chart in charts">
 				<p>Graf závislosti <b>{{chart.y_axis}}</b> od <b>{{chart.x_axis}}</b></p>
-				<canvas class="chart chart-line" chart-data="chart.data" chart-labels="chart.labels" chart-options="chart.options" chart-dataset-override="chart.datasetOverride"></canvas>
+				<canvas class="chart chart-line" chart-data="chart.data" chart-labels="chart.labels" chart-options="chart.options" chart-dataset-override="chart.datasetOverride">Web browser doesn't support canvas.</canvas>
 				<br>
  			</div>
  		</div>

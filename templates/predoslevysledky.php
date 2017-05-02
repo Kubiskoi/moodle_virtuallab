@@ -17,11 +17,11 @@
 			<tbody>
 				<tr ng-repeat="experiment in data | orderBy:'-executed'">
 					<td>{{experiment.experiment}}</td>
-					<td>{{experiment.executed | date: 'dd.MM.yyyy hh:mm'}}</td>	
+					<td>{{experiment.executed | date:'yyyy-MM-dd HH:mm'}}</td>	
 					<td>
 						<button class="actions_butt" ng-click="show_data(experiment._id)">Zobraz</button>
-						<button class="actions_butt" ng-click="save_data(experiment._id)">Ulož</button>
-						<button class="actions_butt" ng-click="del_data(experiment._id,experiment.experiment,experiment.executed | date: 'dd.MM.yyyy hh:mm')">Vymaž</button>
+						<button class="actions_butt" ng-click="save_data(experiment._id,experiment.executed | date: 'yyyy-MM-dd HH:mm')">Ulož</button>
+						<button class="actions_butt" ng-click="del_data(experiment._id,experiment.experiment,experiment.executed | date: 'yyyy-MM-dd HH:mm')">Vymaž</button>
 					</td>	
 					<td>{{experiment.username}}</td>
 				</tr>

@@ -193,6 +193,132 @@ app.factory('myChart',function(){
 
 });
 
+app.factory('myCanvas',function(){
+  
+  
+
+  var Canvas = function(experiment){
+    this.experiment = experiment;
+    this.cnv = document.getElementById('jh-anim');
+    this.ctx = this.cnv.getContext("2d");
+    this.ctx.transform(1, 0, 0, -1, 0, this.cnv.height);
+
+    //  ===========================================
+    //  animacia sikmy vrh
+    //  ===========================================
+    this.sikmy_vrh_draws = {};
+    this.sikmy_vrh_draws.draw_ball = function(x,y){
+      that.ctx.beginPath();
+      that.ctx.arc(that.begin_offset+x, that.begin_offset+y, 5, 0, 2 * Math.PI);
+      that.ctx.fill();
+      that.ctx.closePath();
+
+    }
+     this.sikmy_vrh_draws.draw_x_axis = function(){
+      that.ctx.beginPath();
+      that.ctx.moveTo(that.begin_offset, that.begin_offset);
+      that.ctx.lineTo(that.cnv.width - 25, that.begin_offset);
+      that.ctx.stroke();
+      that.ctx.closePath();
+    }
+    this.sikmy_vrh_draws.draw_y_axis = function(){
+      that.ctx.beginPath();
+      that.ctx.moveTo(that.begin_offset, that.begin_offset);
+      that.ctx.lineTo(that.begin_offset,that.cnv.height-25);
+      that.ctx.stroke();
+      that.ctx.closePath();
+    }
+     this.sikmy_vrh_draws.draw_x_pointer = function(x){
+      that.ctx.beginPath();
+      that.ctx.moveTo(x+that.begin_offset, that.begin_offset+5);
+      that.ctx.lineTo(x+that.begin_offset, that.begin_offset-5);
+      that.ctx.stroke();
+      that.ctx.closePath();
+
+      that.ctx.transform(1, 0, 0, -1, 0, that.cnv.height);
+      that.ctx.beginPath();
+      that.ctx.font = "15px Arial";
+      that.ctx.fillText(x, x+ (that.begin_offset/2 + 5), that.cnv.height - that.begin_offset + 20);
+      that.ctx.closePath();
+      that.ctx.transform(1, 0, 0, -1, 0, that.cnv.height);
+
+    }
+     this.sikmy_vrh_draws.draw_y_pointer = function(y){
+      that.ctx.beginPath();
+      that.ctx.moveTo(that.begin_offset-5, that.begin_offset+y);
+      that.ctx.lineTo(that.begin_offset+5, that.begin_offset+y);
+      that.ctx.stroke();
+      that.ctx.closePath();
+
+      that.ctx.transform(1, 0, 0, -1, 0, that.cnv.height);
+      that.ctx.beginPath();
+      that.ctx.font = "15px Arial";
+      that.ctx.fillText(y, 15, that.cnv.height - y - that.begin_offset +5);
+      that.ctx.closePath();
+      that.ctx.transform(1, 0, 0, -1, 0, that.cnv.height);
+
+    }
+    this.sikmy_vrh_draws.draw_legend = function(){
+          that.ctx.transform(1, 0, 0, -1, 0, that.cnv.height);
+          that.ctx.beginPath();
+          that.ctx.font = "15px Arial";
+          that.ctx.fillText("y [m]", 20, 40);
+          that.ctx.fillText("x [m]", 540, 360);
+          that.ctx.closePath();
+          that.ctx.transform(1, 0, 0, -1, 0, that.cnv.height);
+
+    }
+    //  ===========================================
+    //  ===========================================
+
+
+    var that = this;
+
+    switch(experiment){
+      case "sikmy_vrh":
+            this.begin_offset = 60;
+            init_sikmy_vrh();
+          break;
+    }
+
+
+    
+
+   
+    function init_sikmy_vrh(){
+      that.sikmy_vrh_draws.draw_x_axis();
+      that.sikmy_vrh_draws.draw_y_axis();
+      that.sikmy_vrh_draws.draw_ball(0,0);
+      that.sikmy_vrh_draws.draw_legend();
+    }
+
+    this.push_new_val = function(val,units){
+      switch(this.experiment){
+        case "sikmy_vrh":
+              that.ctx.clearRect(0, 0, that.cnv.width, that.cnv.height);
+              that.sikmy_vrh_draws.draw_x_axis();
+              that.sikmy_vrh_draws.draw_y_axis();
+              that.sikmy_vrh_draws.draw_ball(val.x,val.y);
+              that.sikmy_vrh_draws.draw_x_pointer(val.x);
+              that.sikmy_vrh_draws.draw_y_pointer(val.y);
+              that.sikmy_vrh_draws.draw_legend();
+          break;
+      }
+
+    }
+
+    this.reset = function(){
+      
+    }
+
+  };
+
+
+
+  return Canvas;
+
+});
+
 
 
 
