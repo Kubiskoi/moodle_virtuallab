@@ -24,7 +24,7 @@ app.factory('MyGlobalVars', function($http,$q,outputStringConvert) {
   $http(req).then(function(data){
       deferred.resolve({
             // path_to_imgs : '/mod/virtuallab/img/experimenty/',
-            path_to_loading_gif : '/mod/virtuallab/img/',
+            path_to_loading_gif : '/mod/virtuallab/pix/',
             logged_user: data.data.username,
             mfilepar: data.data.mfilepar,
             mfilescript: data.data.mfilescript,

@@ -129,18 +129,18 @@ function virtuallab_update_instance(stdClass $virtuallab, mod_virtuallab_mod_for
     $virtuallab->id = $virtuallab->instance;
 
     // You may have to add extra stuff in here.
-   $mData = $mform->get_data();
+    $mData = $mform->get_data();
 
-   $virtuallab->mfilepar = $mData->mfilepar;
-   $virtuallab->mfilescript = $mData->mfilescript;
-   $virtuallab->ipadrs = $mData->ipadrs;
-   $virtuallab->port = $mData->port;
-   $virtuallab->foldername = $mData->foldername;
-   $virtuallab->ipdb = $mData->ipdb;
-   $virtuallab->portdb = $mData->portdb;
-   $virtuallab->inputs = $mData->inputs;
-   $virtuallab->outputs = $mData->outputs;
-   $virtuallab->skipsamples = $mData->skipsamples;
+    $virtuallab->mfilepar = $mData->mfilepar;
+    $virtuallab->mfilescript = $mData->mfilescript;
+    $virtuallab->ipadrs = $mData->ipadrs;
+    $virtuallab->port = $mData->port;
+    $virtuallab->foldername = $mData->foldername;
+    $virtuallab->ipdb = $mData->ipdb;
+    $virtuallab->portdb = $mData->portdb;
+    $virtuallab->inputs = $mData->inputs;
+    $virtuallab->outputs = $mData->outputs;
+    $virtuallab->skipsamples = $mData->skipsamples;
 
     $result = $DB->update_record('virtuallab', $virtuallab);
 

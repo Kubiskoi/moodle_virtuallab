@@ -185,6 +185,11 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 		//inicializuj socket factory
 		socket.init(data.ipadrs,data.port);
 
+		//ak nefunguje vypoctovy zerver
+		socket.on('connect_error',function(err){
+			alert("Vypočtový server nedostupný.");
+		})
+
 		//toto je socket io zachytenie eventu, kde matlab server posiela data
 		//zachytavam len vysledky urcene mne
 		socket.on('results_for:'+data.logged_user,function(msg){
@@ -373,22 +378,6 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 		})
 
-
-
-
-		// //zobraz loading gif
-		// $scope.show_loading = true;
-		// //odosli vstupne parametre na matlabovky server
-		// socket.emit('input parameters', args);
-
-		// //nadstav na pociatocne hodnoty
-		// cancated_obj = {};
-		// $scope.keys = [];
-		// $scope.data_to_display = [];
-		// index = 0;
-		// int_start = false;
-		// $scope.tableshow = false;
-		// help_arr = [];
 	})
 
 

@@ -1,15 +1,14 @@
 TODO
-grafy - uz pri prechadzani predoslich tak viem najst maxima a minima
+ak nejse vypoctovy server informuj
 animaciu
 
 spravit medzery medzi grafmi a odsunut tabulku
 
 
 
-
 spravit druhy experiment
 
-upravit manazera aby neslo api ked je unauthorize
+
 
 upravit starklab
 
@@ -18,5 +17,6 @@ instalaciu
 pouzivanie
 
 odstranit prednadstavene hodnoty v moodle formulare
+nastavit verziu
 
 grafy sa vyrobia podla nastaeni outputu kazdy dostane vsetky data ale vybera si len tie co potrebuje

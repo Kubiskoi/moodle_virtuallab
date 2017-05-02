@@ -9,7 +9,7 @@
 			<thead>
 				<tr>
 					<th>Experiment</th>
-					<th>Dátum</th>
+					<th>Dátum simuláice</th>
 					<th>Akcie</th>
 					<th>Užívateľ</th>
 				</tr>

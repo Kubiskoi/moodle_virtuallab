@@ -38,10 +38,10 @@
 			<button ng-class="{'jh-nav-button-selected':isSectionShown('experiment')}" class="jh-nav-button" ng-click="ShowSection('experiment')"><?php echo $virtuallab->name;?></button>
 		</p>
 		<p>
-			<button ng-class="{'jh-nav-button-selected':isSectionShown('priebeh')}" class="jh-nav-button" ng-click="ShowSection('priebeh')">Priebeh Experimentu</button>
+			<button ng-class="{'jh-nav-button-selected':isSectionShown('priebeh')}" class="jh-nav-button" ng-click="ShowSection('priebeh')">Priebeh experimentu</button>
 		</p>
 		<p
-			><button ng-class="{'jh-nav-button-selected':isSectionShown('predosle')}" class="jh-nav-button" ng-click="ShowSection('predosle')">Predošlé Simulácie</button>
+			><button ng-class="{'jh-nav-button-selected':isSectionShown('predosle')}" class="jh-nav-button" ng-click="ShowSection('predosle')">Predošlé simulácie</button>
 		</p>
 	</div>
 	

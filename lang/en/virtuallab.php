@@ -45,3 +45,14 @@ $string['virtuallab'] = 'virtuallab';
 $string['pluginadministration'] = 'virtuallab administration';
 $string['pluginname'] = 'virtuallab';
 $string['exp_set'] = 'Experiment Settings';
+$string['mfilepar_str'] = 'Mfile for parameters';
+$string['outputs_str'] = 'Outputs';
+$string['inputs_str'] = 'Inputs';
+$string['skipsamples_str'] = 'Skip Samples';
+$string['portdb_str'] = 'Port MongoDB';
+$string['ipdb_str'] = 'IP Address of MongoDB';
+$string['port_str'] = 'Port Matlab server';
+$string['ipadrs_str'] = 'IP Address of Matlab server';
+$string['foldername_str'] = 'Folder Name on server';
+$string['mfilescript_str'] = 'Mfile for script';
+

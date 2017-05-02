@@ -79,37 +79,49 @@ class mod_virtuallab_mod_form extends moodleform_mod {
 
 
 
-        $mform->addElement('text', 'mfilepar', 'Mfile for parameters');
+        // $mform->addElement('text', 'mfilepar', 'Mfile for parameters');
+
+
+        $mform->addElement('text', 'mfilepar', get_string('mfilepar_str', 'virtuallab'));
         $mform->addRule('mfilepar', null, 'required', null, 'client');
 
-        $mform->addElement('text', 'mfilescript', 'Mfile for script');
+        // $mform->addElement('text', 'mfilescript', 'Mfile for script');
+        $mform->addElement('text', 'mfilescript', get_string('mfilescript_str','virtuallab'));
         $mform->addRule('mfilescript', null, 'required', null, 'client');
 
-        $mform->addElement('text', 'foldername', 'Folder Name on server');
+        // $mform->addElement('text', 'foldername', 'Folder Name on server');
+        $mform->addElement('text', 'foldername', get_string('foldername_str','virtuallab'));
         $mform->addRule('foldername', null, 'required', null, 'client');
 
-        $mform->addElement('text', 'ipadrs', 'IP Address of Matlab server');
+        // $mform->addElement('text', 'ipadrs', 'IP Address of Matlab server');
+        $mform->addElement('text', 'ipadrs', get_string('ipadrs_str','virtuallab'));
         $mform->addRule('ipadrs', null, 'required', null, 'client');
 
-        $mform->addElement('text', 'port', 'Port Matlab server');
+        // $mform->addElement('text', 'port', 'Port Matlab server');
+        $mform->addElement('text', 'port', get_string('port_str','virtuallab'));
         $mform->addRule('port', null, 'required', null, 'client');
 
-        $mform->addElement('text', 'ipdb', 'IP Address of MongoDB');
+        // $mform->addElement('text', 'ipdb', 'IP Address of MongoDB');
+        $mform->addElement('text', 'ipdb',get_string('ipdb_str','virtuallab') );
         $mform->addRule('ipdb', null, 'required', null, 'client');
 
-        $mform->addElement('text', 'portdb', 'Port MongoDB');
+        // $mform->addElement('text', 'portdb', 'Port MongoDB');
+        $mform->addElement('text', 'portdb',  get_string('portdb_str','virtuallab') );
         $mform->addRule('portdb', null, 'required', null, 'client');
 
-        $mform->addElement('text', 'skipsamples', 'Skip Samples');
+        // $mform->addElement('text', 'skipsamples', 'Skip Samples');
+        $mform->addElement('text', 'skipsamples', get_string('skipsamples_str','virtuallab') );
         $mform->addRule('skipsamples', null, 'required', null, 'client');
 
         //typ, meno, label,Fourth element here is a string or array of attributes
-        $mform->addElement('textarea', 'inputs', 'Inputs', 'wrap="hard" rows="10" cols="50"');
+        // $mform->addElement('textarea', 'inputs', 'Inputs', 'wrap="hard" rows="10" cols="50"');
+        $mform->addElement('textarea', 'inputs', get_string('inputs_str','virtuallab'), 'wrap="hard" rows="10" cols="50"');
         $mform->addRule('inputs', null, 'required', null, 'client');
         //meno elementu na ktory sa viaze, v lang/eng $string['inputshelp'], meno komponentnu
         $mform->addHelpButton('inputs', 'inputshelp','virtuallab');
 
-        $mform->addElement('textarea', 'outputs', 'Outputs', 'wrap="hard" rows="10" cols="50"');
+        // $mform->addElement('textarea', 'outputs', 'Outputs', 'wrap="hard" rows="10" cols="50"');
+        $mform->addElement('textarea', 'outputs', get_string('outputs_str','virtuallab'), 'wrap="hard" rows="10" cols="50"');
         $mform->addRule('outputs', null, 'required', null, 'client');
         $mform->addHelpButton('outputs', 'outputshelp','virtuallab');
 
