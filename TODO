@@ -1,8 +1,9 @@
 TODO
-ak nejse vypoctovy server informuj
-animaciu
 
 spravit medzery medzi grafmi a odsunut tabulku
+animaciu
+
+
 
 
 
@@ -17,6 +18,8 @@ instalaciu
 pouzivanie
 
 odstranit prednadstavene hodnoty v moodle formulare
-nastavit verziu
 
-grafy sa vyrobia podla nastaeni outputu kazdy dostane vsetky data ale vybera si len tie co potrebuje
+
+poznamky pre mna:
+	- ako funguju grafy:
+		grafy sa vyrobia podla nastaeni outputu kazdy dostane vsetky data ale vybera si len tie co potrebuje
