@@ -159,8 +159,8 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 		//ak poslednych 30 je rovnakych vrat true
 		this.check_help_arr = function(arr){
-			var new_arr = arr.slice(arr.length-30,arr.length);
-			if(new_arr.length == 30 && that.identical(new_arr)){
+			var new_arr = arr.slice(arr.length-300,arr.length);
+			if(new_arr.length == 300 && that.identical(new_arr)){
 				return true;
 			}
 			return false;
@@ -201,6 +201,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 			//ak je status running a prve pole z dat uz ma nejake hodnoty tak pripoj hodnotky k polu
 			if((msg.result.status == "running") && angular.isArray(msg.result.data[Object.keys(msg.result.data)[0]])){
+
 				//zisti kluce, cize meno vracajucich sa vyslednych hodnot ako x,y,v atd..
 				$scope.keys = Object.keys(msg.result.data);
 				$scope.units = msg.result.units;
@@ -274,6 +275,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 						
 							//ak sa index nachadza v prijatom poli cize mam co zobrazovat
 							if(index < cancated_obj[$scope.keys[0]].length){
+								console.log(index);
 								//do pomocneho objektu
 								//podla klucov prirad hodnotu z pola prijatych a pospajanych dat
 								var obj = {};
@@ -336,12 +338,26 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 		MyGlobalVars.get_settings().then(function(data){
 
+
 			var skip_samples2 = data.skipsamples;
 			$scope.tableshow = true;
 			$scope.keys = args.keys;
 			$scope.units = args.units;
 			index = 0;
 			$scope.data_to_display = [];
+
+
+			//defaulta hodnota nech je to spon trochu spomalene
+			var timejump = 10*skip_samples2;
+
+			//ak je pole cas, co by malo byt vzdy
+			if(args.time){
+				//casova dlzka simulacie
+				var finish_time = args.time[args.time.length-1];
+				//kolko hodnot budem vykreslovat
+				var how_many = args.time.length/skip_samples2;
+				timejump = finish_time/how_many*1000;
+			}
 			var my_interval2 = $interval(function(){
 
 				//ak je index v poli
@@ -384,7 +400,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 				}
 				
-			},skip_samples2*10);
+			},timejump);
 
 
 		})
