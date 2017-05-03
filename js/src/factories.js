@@ -209,51 +209,51 @@ app.factory('myCanvas',function(){
     this.sikmy_vrh_draws = {};
     this.sikmy_vrh_draws.draw_ball = function(x,y){
       that.ctx.beginPath();
-      that.ctx.arc(that.begin_offset+x, that.begin_offset+y, 5, 0, 2 * Math.PI);
+      that.ctx.arc(that.begin_offset_sikmy_vrh+x, that.begin_offset_sikmy_vrh+y, 5, 0, 2 * Math.PI);
       that.ctx.fill();
       that.ctx.closePath();
 
     }
      this.sikmy_vrh_draws.draw_x_axis = function(){
       that.ctx.beginPath();
-      that.ctx.moveTo(that.begin_offset, that.begin_offset);
-      that.ctx.lineTo(that.cnv.width - 25, that.begin_offset);
+      that.ctx.moveTo(that.begin_offset_sikmy_vrh, that.begin_offset_sikmy_vrh);
+      that.ctx.lineTo(that.cnv.width - 25, that.begin_offset_sikmy_vrh);
       that.ctx.stroke();
       that.ctx.closePath();
     }
     this.sikmy_vrh_draws.draw_y_axis = function(){
       that.ctx.beginPath();
-      that.ctx.moveTo(that.begin_offset, that.begin_offset);
-      that.ctx.lineTo(that.begin_offset,that.cnv.height-25);
+      that.ctx.moveTo(that.begin_offset_sikmy_vrh, that.begin_offset_sikmy_vrh);
+      that.ctx.lineTo(that.begin_offset_sikmy_vrh,that.cnv.height-25);
       that.ctx.stroke();
       that.ctx.closePath();
     }
      this.sikmy_vrh_draws.draw_x_pointer = function(x){
       that.ctx.beginPath();
-      that.ctx.moveTo(x+that.begin_offset, that.begin_offset+5);
-      that.ctx.lineTo(x+that.begin_offset, that.begin_offset-5);
+      that.ctx.moveTo(x+that.begin_offset_sikmy_vrh, that.begin_offset_sikmy_vrh+5);
+      that.ctx.lineTo(x+that.begin_offset_sikmy_vrh, that.begin_offset_sikmy_vrh-5);
       that.ctx.stroke();
       that.ctx.closePath();
 
       that.ctx.transform(1, 0, 0, -1, 0, that.cnv.height);
       that.ctx.beginPath();
       that.ctx.font = "15px Arial";
-      that.ctx.fillText(x, x+ (that.begin_offset/2 + 5), that.cnv.height - that.begin_offset + 20);
+      that.ctx.fillText(x, x+ (that.begin_offset_sikmy_vrh/2 + 5), that.cnv.height - that.begin_offset_sikmy_vrh + 20);
       that.ctx.closePath();
       that.ctx.transform(1, 0, 0, -1, 0, that.cnv.height);
 
     }
      this.sikmy_vrh_draws.draw_y_pointer = function(y){
       that.ctx.beginPath();
-      that.ctx.moveTo(that.begin_offset-5, that.begin_offset+y);
-      that.ctx.lineTo(that.begin_offset+5, that.begin_offset+y);
+      that.ctx.moveTo(that.begin_offset_sikmy_vrh-5, that.begin_offset_sikmy_vrh+y);
+      that.ctx.lineTo(that.begin_offset_sikmy_vrh+5, that.begin_offset_sikmy_vrh+y);
       that.ctx.stroke();
       that.ctx.closePath();
 
       that.ctx.transform(1, 0, 0, -1, 0, that.cnv.height);
       that.ctx.beginPath();
       that.ctx.font = "15px Arial";
-      that.ctx.fillText(y, 15, that.cnv.height - y - that.begin_offset +5);
+      that.ctx.fillText(y, 15, that.cnv.height - y - that.begin_offset_sikmy_vrh +5);
       that.ctx.closePath();
       that.ctx.transform(1, 0, 0, -1, 0, that.cnv.height);
 
@@ -270,14 +270,72 @@ app.factory('myCanvas',function(){
     }
     //  ===========================================
     //  ===========================================
+    
+    //  ===========================================
+    //  animacia volny pad
+    //  ===========================================
+    this.volny_pad_draws = {};
+     this.volny_pad_draws.draw_x_axis = function(){
+      that.ctx.beginPath();
+      that.ctx.moveTo(that.begin_offset_volny_pad, that.begin_offset_volny_pad);
+      that.ctx.lineTo(that.cnv.width - 25, that.begin_offset_volny_pad);
+      that.ctx.stroke();
+      that.ctx.closePath();
+    }
+    this.volny_pad_draws.draw_y_axis = function(){
+      that.ctx.beginPath();
+      that.ctx.moveTo(that.begin_offset_volny_pad, that.begin_offset_volny_pad);
+      that.ctx.lineTo(that.begin_offset_volny_pad,that.cnv.height-25);
+      that.ctx.stroke();
+      that.ctx.closePath();
+    }
+    this.volny_pad_draws.draw_legend = function(){
+          that.ctx.transform(1, 0, 0, -1, 0, that.cnv.height);
+          that.ctx.beginPath();
+          that.ctx.font = "15px Arial";
+          that.ctx.fillText("y [m]", 20, 40);
+          that.ctx.closePath();
+          that.ctx.transform(1, 0, 0, -1, 0, that.cnv.height);
+
+    }
+
+    this.volny_pad_draws.draw_ball = function(h){
+      that.ctx.beginPath();
+      //canvas ma na vysku 400 pixelov a my pustame z malych vysok
+      that.ctx.arc(that.begin_offset_volny_pad*2, that.begin_offset_volny_pad+h*2, 5, 0, 2 * Math.PI);
+      that.ctx.fill();
+      that.ctx.closePath();
+
+    }
+     this.volny_pad_draws.draw_y_pointer = function(h){
+      that.ctx.beginPath();
+      that.ctx.moveTo(that.begin_offset_volny_pad-5, that.begin_offset_volny_pad+h*2);
+      that.ctx.lineTo(that.begin_offset_volny_pad+5, that.begin_offset_volny_pad+h*2);
+      that.ctx.stroke();
+      that.ctx.closePath();
+
+      that.ctx.transform(1, 0, 0, -1, 0, that.cnv.height);
+      that.ctx.beginPath();
+      that.ctx.font = "15px Arial";
+      that.ctx.fillText(h, 15, that.cnv.height - 2*h - that.begin_offset_volny_pad +5);
+      that.ctx.closePath();
+      that.ctx.transform(1, 0, 0, -1, 0, that.cnv.height);
+
+    }
+    //  ===========================================
+    //  ===========================================
 
 
     var that = this;
 
     switch(experiment){
       case "sikmy_vrh":
-            this.begin_offset = 60;
+            this.begin_offset_sikmy_vrh = 60;
             init_sikmy_vrh();
+          break;
+      case "volny_pad":
+          this.begin_offset_volny_pad = 60;
+          init_volny_pad();
           break;
     }
 
@@ -292,6 +350,13 @@ app.factory('myCanvas',function(){
       that.sikmy_vrh_draws.draw_legend();
     }
 
+    function init_volny_pad(){
+      that.volny_pad_draws.draw_x_axis();
+      that.volny_pad_draws.draw_y_axis();
+
+      that.volny_pad_draws.draw_legend();
+    }
+
     this.push_new_val = function(val,units){
       switch(this.experiment){
         case "sikmy_vrh":
@@ -302,6 +367,15 @@ app.factory('myCanvas',function(){
               that.sikmy_vrh_draws.draw_x_pointer(val.x);
               that.sikmy_vrh_draws.draw_y_pointer(val.y);
               that.sikmy_vrh_draws.draw_legend();
+          break;
+        case "volny_pad":
+              that.ctx.clearRect(0, 0, that.cnv.width, that.cnv.height);
+              that.volny_pad_draws.draw_x_axis();
+              that.volny_pad_draws.draw_y_axis();
+              that.volny_pad_draws.draw_legend();
+              that.volny_pad_draws.draw_ball(val.h);
+              that.volny_pad_draws.draw_y_pointer(val.h);
+
           break;
       }
 
