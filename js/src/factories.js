@@ -382,9 +382,9 @@ app.factory('myCanvas',function(){
 
     }
 
-    this.reset = function(){
+    // this.reset = function(){
       
-    }
+    // }
 
   };
 

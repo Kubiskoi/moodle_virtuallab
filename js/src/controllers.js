@@ -325,26 +325,27 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 						alert('Error on saving to database!');
 					})
 
+					//v intervale kontroluj ci uz su zobrazene prijate data, ak su vsetky zobraz este poslednu
 					var tmp_int = $interval(function(){
-						// console.log((cancated_obj[$scope.keys[0]].length/skip_samples));
-						// console.log($scope.data_to_display.length);
 						var pocet = cancated_obj[$scope.keys[0]].length/skip_samples;
-						// if((pocet == $scope.data_to_display.length) || (pocet < $scope.data_to_display.length) ){
 						if(pocet <= $scope.data_to_display.length){
 
-								var obj = {};
-								angular.forEach($scope.keys,function(key){
-									obj[key] = cancated_obj[key][cancated_obj[key].length-1];
-								})
-								//pushni posledny riadok tabulky
-								$scope.data_to_display.push(obj);
-
-								//daj hodnotu aj grafom
-								angular.forEach($scope.charts,function(chart){
-									chart.push_new_val(obj,$scope.units);
-								});
-
-								my_canvas.push_new_val(obj,$scope.units);
+								//pridaj posledny iba ak samplovanie nesedi s celkovym poctom
+								if( (cancated_obj[$scope.keys[0]].length % skip_samples) != 0){
+									var obj = {};
+									angular.forEach($scope.keys,function(key){
+										obj[key] = cancated_obj[key][cancated_obj[key].length-1];
+									})
+									//pushni posledny riadok tabulky
+									$scope.data_to_display.push(obj);
+	
+									//daj hodnotu aj grafom
+									angular.forEach($scope.charts,function(chart){
+										chart.push_new_val(obj,$scope.units);
+									});
+	
+									my_canvas.push_new_val(obj,$scope.units);
+								}
 
 							$interval.cancel(my_interval);
 							$interval.cancel(tmp_int);
@@ -376,7 +377,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 		angular.forEach($scope.charts,function(chart){
 			chart.reset();
 		});
-		my_canvas.reset();
+		// my_canvas.reset();
 	})
 
 
@@ -386,7 +387,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 		angular.forEach($scope.charts,function(chart){
 			chart.reset();
 		});
-		my_canvas.reset();
+		// my_canvas.reset();
 
 
 		MyGlobalVars.get_settings().then(function(data){
@@ -436,18 +437,20 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 				
 				//ak nie je pridaj posledny prvok
 				}else{
-					var obj = {};
-					angular.forEach($scope.keys,function(key){
-						obj[key] = args[key][args[key].length-1];
-					})
-					//pushni posledny riadok tabulky
-					$scope.data_to_display.push(obj);
-
-					//daj hodnotu aj grafom
-					angular.forEach($scope.charts,function(chart){
-						chart.push_new_val(obj,$scope.units);
-					});
-					my_canvas.push_new_val(obj,$scope.units);
+					if( (args[$scope.keys[0]].length%skip_samples2)!=0){
+						var obj = {};
+						angular.forEach($scope.keys,function(key){
+							obj[key] = args[key][args[key].length-1];
+						})
+						//pushni posledny riadok tabulky
+						$scope.data_to_display.push(obj);
+	
+						//daj hodnotu aj grafom
+						angular.forEach($scope.charts,function(chart){
+							chart.push_new_val(obj,$scope.units);
+						});
+						my_canvas.push_new_val(obj,$scope.units);
+					}
 
 					//ukonci interval
 					$interval.cancel(my_interval2);
