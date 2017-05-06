@@ -201,6 +201,7 @@ app.factory('myCanvas',function(){
     this.experiment = experiment;
     this.cnv = document.getElementById('jh-anim');
     this.ctx = this.cnv.getContext("2d");
+    //pretocenie canvasu aby [0,0] bol v lavo dole, defaultne je v lavo hore
     this.ctx.transform(1, 0, 0, -1, 0, this.cnv.height);
 
     //  ===========================================
@@ -301,7 +302,7 @@ app.factory('myCanvas',function(){
 
     this.volny_pad_draws.draw_ball = function(h){
       that.ctx.beginPath();
-      //canvas ma na vysku 400 pixelov a my pustame z malych vysok
+      //canvas ma na vysku 400 pixelov a my pustame z malych vysok preto mozem dat *2
       that.ctx.arc(that.begin_offset_volny_pad*2, that.begin_offset_volny_pad+h*2, 5, 0, 2 * Math.PI);
       that.ctx.fill();
       that.ctx.closePath();
@@ -317,6 +318,7 @@ app.factory('myCanvas',function(){
       that.ctx.transform(1, 0, 0, -1, 0, that.cnv.height);
       that.ctx.beginPath();
       that.ctx.font = "15px Arial";
+      //canvas ma na vysku 400 pixelov a my pustame z malych vysok preto mozem dat *2
       that.ctx.fillText(h, 15, that.cnv.height - 2*h - that.begin_offset_volny_pad +5);
       that.ctx.closePath();
       that.ctx.transform(1, 0, 0, -1, 0, that.cnv.height);
@@ -353,7 +355,6 @@ app.factory('myCanvas',function(){
     function init_volny_pad(){
       that.volny_pad_draws.draw_x_axis();
       that.volny_pad_draws.draw_y_axis();
-
       that.volny_pad_draws.draw_legend();
     }
 

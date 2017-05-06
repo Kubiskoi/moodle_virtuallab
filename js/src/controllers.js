@@ -195,9 +195,18 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 		//toto je socket io zachytenie eventu, kde matlab server posiela data
 		//zachytavam len vysledky urcene mne
+		// var t1 = + new Date;
+		// var t2 = 0;
 		socket.on('results_for:'+data.logged_user,function(msg){
-			//zobraz loading gif
-			$scope.show_loading = false;
+			// t2 = + new Date;
+			// console.log("time: ",t2-t1);
+			// console.log(msg);
+			// if(t2-t1> 1500){
+			// 	console.log(msg);
+			// }
+			// t1 = t2;
+
+
 
 			//ak je status running a prve pole z dat uz ma nejake hodnoty tak pripoj hodnotky k polu
 			if((msg.result.status == "running") && angular.isArray(msg.result.data[Object.keys(msg.result.data)[0]])){
@@ -216,66 +225,50 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 				})
 
 
-				//aby sa spustil len raz interval
-				// a tabulku tiez len raz zobrazime
-				if(!int_start){
+				//aby sa spustil len raz interval //zacni ked uz su nakumulovane data
+				// if(!int_start){
+				if(!int_start && cancated_obj[$scope.keys[0]].length > 40){
+					// a tabulku tiez len raz zobrazime
 					$scope.tableshow = true;
+					//aby sa spustil len raz interval
 					int_start = true;
+					//skovaj loading gif
+					$scope.show_loading = false;
+
+
+					// $timeout(function(){
+						// console.log('zacne o sekundu neskor');
+
 
 					//interval co prechadza pospajanymi polami hodnot
 					my_interval = $interval(function(){
+						console.log('interval');
 						//do help_arr ukladaj dlzku je jedno akeho pola
-						help_arr.push(cancated_obj[$scope.keys[0]].length);
+						// help_arr.push(cancated_obj[$scope.keys[0]].length);
 						//ak toto pole ma uz na poslednych x miestach rovnaku hodnotu, viem ze neprijmam uz nove hodnoty
 						//a mozem pripojit poslednu hodnotu a ukoncit interval
-						if(that.check_help_arr(help_arr)){
-							var obj = {};
-							angular.forEach($scope.keys,function(key){
-								obj[key] = cancated_obj[key][cancated_obj[key].length-1];
-							})
-							//pushni posledny riadok tabulky
-							$scope.data_to_display.push(obj);
+						// if(that.check_help_arr(help_arr)){
+						// 	var obj = {};
+						// 	angular.forEach($scope.keys,function(key){
+						// 		obj[key] = cancated_obj[key][cancated_obj[key].length-1];
+						// 	})
+						// 	//pushni posledny riadok tabulky
+						// 	$scope.data_to_display.push(obj);
 
-							//daj hodnotu aj grafom
-							angular.forEach($scope.charts,function(chart){
-								chart.push_new_val(obj,$scope.units);
-							});
+						// 	//daj hodnotu aj grafom
+						// 	angular.forEach($scope.charts,function(chart){
+						// 		chart.push_new_val(obj,$scope.units);
+						// 	});
 
-							my_canvas.push_new_val(obj,$scope.units);
+						// 	my_canvas.push_new_val(obj,$scope.units);
 
-							//ukonci interval
-							$interval.cancel(my_interval);
-
-							//savenmi do databazy
-							var date = + new Date;
-							var obj_to_save = {"username":username,"experiment":experiment_foldername,"executed":date,"keys":$scope.keys,"units":$scope.units};
-							angular.forEach($scope.keys,function(key){
-								//dam ich do stringu lebo limit postu pre pocet inputov je na MAMP 1000 a neviem kolko ma FEI moodle
-								//http://stackoverflow.com/questions/2341149/limit-of-post-arguments-in-html-or-php
-								obj_to_save[key] = cancated_obj[key];
-								// obj_to_save[key] = JSON.stringify(cancated_obj[key]);
-							})
-							var req = {
-								method: 'POST',
-								url: 'mongo_scripts/save_to_db.php',
-								// headers: {
-							 //   		'Content-Type': 'application/x-www-form-urlencoded'
-								// },
-							 	params: {ipdb:ipdb,portdb:portdb},
-							 	data: obj_to_save
-							 	// data: $httpParamSerializerJQLike(obj_to_save)
-							}
-							$http(req).then(function(data){
-							},function(err){
-								alert('Error on saving to database!');
-							})
-
-
-						}
+						// 	//ukonci interval
+						// 	$interval.cancel(my_interval);
+						// 	}
+							//tu konci if overenia posledneho udaju
 						
 							//ak sa index nachadza v prijatom poli cize mam co zobrazovat
 							if(index < cancated_obj[$scope.keys[0]].length){
-								console.log(index);
 								//do pomocneho objektu
 								//podla klucov prirad hodnotu z pola prijatych a pospajanych dat
 								var obj = {};
@@ -294,9 +287,69 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 								//zvacsi index
 								index=index+skip_samples;
+							}else{
+								// console.log('sek');
 							}
+
+					//tu konci interval
 					},skip_samples*10);
+				//tu konci timeout
+				// },3000);
+			
+
+
+
 				}
+			}else if(msg.result.status == "stopped"){
+				//vsetky data su prijate mozem ulozit do databazy
+					var date = + new Date;
+					var obj_to_save = {"username":username,"experiment":experiment_foldername,"executed":date,"keys":$scope.keys,"units":$scope.units};
+					angular.forEach($scope.keys,function(key){
+						//dam ich do stringu lebo limit postu pre pocet inputov je na MAMP 1000 a neviem kolko ma FEI moodle
+						//http://stackoverflow.com/questions/2341149/limit-of-post-arguments-in-html-or-php
+						obj_to_save[key] = cancated_obj[key];
+						// obj_to_save[key] = JSON.stringify(cancated_obj[key]);
+					})
+					var req = {
+						method: 'POST',
+						url: 'mongo_scripts/save_to_db.php',
+						// headers: {
+					 //   		'Content-Type': 'application/x-www-form-urlencoded'
+						// },
+					 	params: {ipdb:ipdb,portdb:portdb},
+					 	data: obj_to_save
+					 	// data: $httpParamSerializerJQLike(obj_to_save)
+					}
+					$http(req).then(function(data){
+					},function(err){
+						alert('Error on saving to database!');
+					})
+
+					var tmp_int = $interval(function(){
+						// console.log((cancated_obj[$scope.keys[0]].length/skip_samples));
+						// console.log($scope.data_to_display.length);
+						var pocet = cancated_obj[$scope.keys[0]].length/skip_samples;
+						// if((pocet == $scope.data_to_display.length) || (pocet < $scope.data_to_display.length) ){
+						if(pocet <= $scope.data_to_display.length){
+
+								var obj = {};
+								angular.forEach($scope.keys,function(key){
+									obj[key] = cancated_obj[key][cancated_obj[key].length-1];
+								})
+								//pushni posledny riadok tabulky
+								$scope.data_to_display.push(obj);
+
+								//daj hodnotu aj grafom
+								angular.forEach($scope.charts,function(chart){
+									chart.push_new_val(obj,$scope.units);
+								});
+
+								my_canvas.push_new_val(obj,$scope.units);
+
+							$interval.cancel(my_interval);
+							$interval.cancel(tmp_int);
+						}
+					},100);
 			}
 		})
 	})
@@ -306,7 +359,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 	$rootScope.$on('spustiExperiment', function(event, args) {
 		//zobraz loading gif
 		$scope.show_loading = true;
-		//odosli vstupne parametre na matlabovky server
+		//odosli vstupne parametre na matlabovsky server
 		socket.emit('input parameters', args);
 
 		//nadstav na pociatocne hodnoty
@@ -356,11 +409,12 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 				var finish_time = args.time[args.time.length-1];
 				//kolko hodnot budem vykreslovat
 				var how_many = args.time.length/skip_samples2;
-				timejump = finish_time/how_many*1000;
+				timejump = Math.round(finish_time/how_many*1000);
 			}
 			var my_interval2 = $interval(function(){
 
-				//ak je index v poli
+				//ak je index v poli, tu mam vsetky data cize sa nestane ze by index prekrocil dzku pola, to sa tava iba ked realtimeovo prijmam data cize index
+				// moze byt mimo uz prijateho pola ale to neznamena konec simulacie lebo dalsie data mozu byt na ceste
 				if(index < args[$scope.keys[0]].length){
 					//do pomocneho objektu
 					//podla klucov prirad hodnotu z pola prijatych a pospajanych dat
