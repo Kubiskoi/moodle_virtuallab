@@ -239,7 +239,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 					if(cancated_obj['time']){
 						jump_ms =  Math.round((cancated_obj['time'][1] - cancated_obj['time'][0])*skip_samples*1000);
-						console.log(jump_ms);
+						// console.log(jump_ms);
 					}else{
 						jump_ms = 200;
 					}
@@ -339,8 +339,8 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 					var tmp_int = $interval(function(){
 						var pocet = cancated_obj[$scope.keys[0]].length/skip_samples;
 						if(pocet <= $scope.data_to_display.length){
-							console.log(pocet);
-							console.log($scope.data_to_display.length);
+							// console.log(pocet);
+							// console.log($scope.data_to_display.length);
 
 
 								//pridaj posledny iba ak samplovanie nesedi s celkovym poctom
