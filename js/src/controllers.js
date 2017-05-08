@@ -98,6 +98,7 @@ app.controller('ExperimentCtrl',function($scope,$http,MyGlobalVars,$rootScope,my
 			obj["mfilescript"] = data.mfilescript;
 			obj["ipadrs"] = data.ipadrs;
 			obj["port"] = data.port;
+			obj["from"] = 'virtuallab'
 
 			$scope.ShowSection('priebeh');
 			$rootScope.$broadcast('spustiExperiment', obj);
@@ -144,27 +145,28 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 	
 	//do tohto pola si budem ukladat dlzku pola ktore sa zvacsuje s prijatymi datami, cas, lebo cas je pri kazdom experimente
 	//ak poslednych x hodnot cize dlzok bude rovnakych (pole sa uz nezvacsujes) tak viem ze  uz neprijmam nove data a viem pridat posledny hodnotu a ukoncit interval
-	var help_arr = [];
+	// var help_arr = [];
 	var that = this;
+	var jump_ms;
 
 		//funkcia vrati true ak je pole plne rovnakych prvkov
-		this.identical = function(array) {
-	    	for(var i = 0; i < array.length - 1; i++) {
-	    	    if(array[i] !== array[i+1]) {
-	    	        return false;
-	    	    }
-	    	}
-	    	return true;
-		}
+		// this.identical = function(array) {
+	 //    	for(var i = 0; i < array.length - 1; i++) {
+	 //    	    if(array[i] !== array[i+1]) {
+	 //    	        return false;
+	 //    	    }
+	 //    	}
+	 //    	return true;
+		// }
 
-		//ak poslednych 30 je rovnakych vrat true
-		this.check_help_arr = function(arr){
-			var new_arr = arr.slice(arr.length-300,arr.length);
-			if(new_arr.length == 300 && that.identical(new_arr)){
-				return true;
-			}
-			return false;
-		}
+		// //ak poslednych 30 je rovnakych vrat true
+		// this.check_help_arr = function(arr){
+		// 	var new_arr = arr.slice(arr.length-300,arr.length);
+		// 	if(new_arr.length == 300 && that.identical(new_arr)){
+		// 		return true;
+		// 	}
+		// 	return false;
+		// }
 	
 	
 	//ked sa resolvnu MyGlovalVars
@@ -197,7 +199,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 		//zachytavam len vysledky urcene mne
 		// var t1 = + new Date;
 		// var t2 = 0;
-		socket.on('results_for:'+data.logged_user,function(msg){
+		socket.on('results_for:'+data.logged_user+'virtuallab',function(msg){
 			// t2 = + new Date;
 			// console.log("time: ",t2-t1);
 			// console.log(msg);
@@ -207,9 +209,9 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 			// t1 = t2;
 
 
-
 			//ak je status running a prve pole z dat uz ma nejake hodnoty tak pripoj hodnotky k polu
 			if((msg.result.status == "running") && angular.isArray(msg.result.data[Object.keys(msg.result.data)[0]])){
+				// console.log('som v running');
 
 				//zisti kluce, cize meno vracajucich sa vyslednych hodnot ako x,y,v atd..
 				$scope.keys = Object.keys(msg.result.data);
@@ -227,7 +229,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 				//aby sa spustil len raz interval //zacni ked uz su nakumulovane data
 				// if(!int_start){
-				if(!int_start && cancated_obj[$scope.keys[0]].length > 40){
+				if((int_start == false) && cancated_obj[$scope.keys[0]].length > 40){
 					// a tabulku tiez len raz zobrazime
 					$scope.tableshow = true;
 					//aby sa spustil len raz interval
@@ -235,6 +237,12 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 					//skovaj loading gif
 					$scope.show_loading = false;
 
+					if(cancated_obj['time']){
+						jump_ms =  Math.round((cancated_obj['time'][1] - cancated_obj['time'][0])*skip_samples*1000);
+						console.log(jump_ms);
+					}else{
+						jump_ms = 200;
+					}
 
 					// $timeout(function(){
 						// console.log('zacne o sekundu neskor');
@@ -242,7 +250,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 					//interval co prechadza pospajanymi polami hodnot
 					my_interval = $interval(function(){
-						console.log('interval');
+						// console.log('interval');
 						//do help_arr ukladaj dlzku je jedno akeho pola
 						// help_arr.push(cancated_obj[$scope.keys[0]].length);
 						//ak toto pole ma uz na poslednych x miestach rovnaku hodnotu, viem ze neprijmam uz nove hodnoty
@@ -292,7 +300,8 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 							}
 
 					//tu konci interval
-					},skip_samples*10);
+					},jump_ms);
+					// },skip_samples*10);
 				//tu konci timeout
 				// },3000);
 			
@@ -301,6 +310,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 				}
 			}else if(msg.result.status == "stopped"){
+				// console.log('som v stopped');
 				//vsetky data su prijate mozem ulozit do databazy
 					var date = + new Date;
 					var obj_to_save = {"username":username,"experiment":experiment_foldername,"executed":date,"keys":$scope.keys,"units":$scope.units};
@@ -329,9 +339,12 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 					var tmp_int = $interval(function(){
 						var pocet = cancated_obj[$scope.keys[0]].length/skip_samples;
 						if(pocet <= $scope.data_to_display.length){
+							console.log(pocet);
+							console.log($scope.data_to_display.length);
+
 
 								//pridaj posledny iba ak samplovanie nesedi s celkovym poctom
-								if( (cancated_obj[$scope.keys[0]].length % skip_samples) != 0){
+								// if( (cancated_obj[$scope.keys[0]].length % skip_samples) != 0){
 									var obj = {};
 									angular.forEach($scope.keys,function(key){
 										obj[key] = cancated_obj[key][cancated_obj[key].length-1];
@@ -345,7 +358,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 									});
 	
 									my_canvas.push_new_val(obj,$scope.units);
-								}
+								// }
 
 							$interval.cancel(my_interval);
 							$interval.cancel(tmp_int);
@@ -371,7 +384,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 		index = 0;
 		int_start = false;
 		$scope.tableshow = false;
-		help_arr = [];
+		// help_arr = [];
 
 		//resetuj grafy
 		angular.forEach($scope.charts,function(chart){
@@ -437,7 +450,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 				
 				//ak nie je pridaj posledny prvok
 				}else{
-					if( (args[$scope.keys[0]].length%skip_samples2)!=0){
+					// if( (args[$scope.keys[0]].length%skip_samples2)!=0){
 						var obj = {};
 						angular.forEach($scope.keys,function(key){
 							obj[key] = args[key][args[key].length-1];
@@ -450,7 +463,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 							chart.push_new_val(obj,$scope.units);
 						});
 						my_canvas.push_new_val(obj,$scope.units);
-					}
+					// }
 
 					//ukonci interval
 					$interval.cancel(my_interval2);

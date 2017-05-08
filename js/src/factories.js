@@ -339,6 +339,8 @@ app.factory('myCanvas',function(){
           this.begin_offset_volny_pad = 60;
           init_volny_pad();
           break;
+      default:
+          this.cnv.style.display = 'none';
     }
 
 
