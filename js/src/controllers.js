@@ -345,6 +345,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 								//pridaj posledny iba ak samplovanie nesedi s celkovym poctom
 								// if( (cancated_obj[$scope.keys[0]].length % skip_samples) != 0){
+								if( index != cancated_obj[$scope.keys[0]].length){
 									var obj = {};
 									angular.forEach($scope.keys,function(key){
 										obj[key] = cancated_obj[key][cancated_obj[key].length-1];
@@ -358,7 +359,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 									});
 	
 									my_canvas.push_new_val(obj,$scope.units);
-								// }
+								}
 
 							$interval.cancel(my_interval);
 							$interval.cancel(tmp_int);
@@ -451,6 +452,9 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 				//ak nie je pridaj posledny prvok
 				}else{
 					// if( (args[$scope.keys[0]].length%skip_samples2)!=0){
+						// console.log(index);
+						// console.log(args[$scope.keys[0]].length);
+						if(index != args[$scope.keys[0]].length){
 						var obj = {};
 						angular.forEach($scope.keys,function(key){
 							obj[key] = args[key][args[key].length-1];
@@ -463,7 +467,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 							chart.push_new_val(obj,$scope.units);
 						});
 						my_canvas.push_new_val(obj,$scope.units);
-					// }
+					}
 
 					//ukonci interval
 					$interval.cancel(my_interval2);
