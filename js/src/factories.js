@@ -49,6 +49,11 @@ app.factory('MyGlobalVars', function($http,$q,outputStringConvert) {
 
 });
 
+app.filter('smallnum',function(){
+  return function(num){
+    return parseFloat(num).toPrecision(3);
+  }
+});
 // http://briantford.com/blog/angular-socket-io
 app.factory('socket', function ($rootScope) {
   this.socket;
@@ -327,6 +332,78 @@ app.factory('myCanvas',function(){
     //  ===========================================
     //  ===========================================
 
+    //  ===========================================
+    //  animacia dve nadrze
+    //  ===========================================
+    this.dve_nadrze_draws = {};
+    this.dve_nadrze_draws.draw_nadrze = function(x){
+      that.ctx.beginPath();
+      that.ctx.moveTo(x,100);
+      that.ctx.lineTo(x,350);
+      that.ctx.stroke();
+      that.ctx.moveTo(x+75,130);
+      that.ctx.lineTo(x+75,350);
+      that.ctx.stroke();
+      that.ctx.moveTo(x,100);
+      that.ctx.lineTo(x+75,100);
+      that.ctx.stroke();
+
+      that.ctx.moveTo(x+200,130);
+      that.ctx.lineTo(x+200,350);
+      that.ctx.stroke();
+      that.ctx.moveTo(x+75+200,100);
+      that.ctx.lineTo(x+75+200,350);
+      that.ctx.stroke();
+      that.ctx.moveTo(x+200,100);
+      that.ctx.lineTo(x+75+200,100);
+      that.ctx.stroke();
+
+      that.ctx.closePath();
+    }
+        this.dve_nadrze_draws.draw_hladiny = function(x,h1,h2){
+      that.ctx.beginPath();
+      that.ctx.fillStyle="#63bbff";
+      that.ctx.fillRect(x+1,101,73,h1*1000);
+      that.ctx.fillRect(x+1+200,101,73,h2*1000);
+      that.ctx.stroke();
+
+      that.ctx.closePath();
+    }
+        this.dve_nadrze_draws.draw_pipe = function(x,h1,h2){
+          that.ctx.beginPath();
+          that.ctx.moveTo(x+75,100);
+          that.ctx.lineTo(x+75+200,100);
+          that.ctx.stroke();
+
+          that.ctx.moveTo(x+75,130);
+          that.ctx.lineTo(x+200,130);
+          that.ctx.stroke();
+
+          that.ctx.moveTo(x+100+33,100);
+          that.ctx.lineTo(x+100+33,140);
+          that.ctx.stroke();
+
+          that.ctx.fillStyle="black";
+          that.ctx.fillRect(x+100+25,140,20,10);
+          that.ctx.stroke();
+
+          that.ctx.fillStyle="#63bbff";
+          var myh1 = h1*1000;
+          if(myh1>= 30)myh1 = 30;
+          that.ctx.fillRect(x+1+70,101,63,myh1);
+          
+          var myh2 = h2*1000;
+          if(myh2>= 30)myh2 = 30;
+          that.ctx.fillRect(x+1+75+55,101,70,myh2);
+
+          // that.ctx.fillRect(x+1+200,101,73,h2*1000);
+          that.ctx.stroke();
+        
+        
+        that.ctx.closePath();
+    }
+    //  ===========================================
+    //  ===========================================
 
     var that = this;
 
@@ -338,6 +415,10 @@ app.factory('myCanvas',function(){
       case "volny_pad":
           this.begin_offset_volny_pad = 60;
           init_volny_pad();
+          break;
+      case "dve_nadrze":
+          // this.begin_offset_volny_pad = 60;
+          init_dve_nadrze();
           break;
       default:
           this.cnv.style.display = 'none';
@@ -360,6 +441,11 @@ app.factory('myCanvas',function(){
       that.volny_pad_draws.draw_legend();
     }
 
+    function init_dve_nadrze(){
+      that.dve_nadrze_draws.draw_nadrze(10);
+      that.dve_nadrze_draws.draw_pipe(10,0,0);
+    }
+
     this.push_new_val = function(val,units){
       switch(this.experiment){
         case "sikmy_vrh":
@@ -379,6 +465,12 @@ app.factory('myCanvas',function(){
               that.volny_pad_draws.draw_ball(val.h);
               that.volny_pad_draws.draw_y_pointer(val.h);
 
+          break;
+        case "dve_nadrze":
+              that.ctx.clearRect(0, 0, that.cnv.width, that.cnv.height);
+              that.dve_nadrze_draws.draw_hladiny(10,val.x1,val.x2);
+              that.dve_nadrze_draws.draw_nadrze(10);
+              that.dve_nadrze_draws.draw_pipe(10,val.x1,val.x2);
           break;
       }
 

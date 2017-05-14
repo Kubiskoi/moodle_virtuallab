@@ -211,6 +211,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 			//ak je status running a prve pole z dat uz ma nejake hodnoty tak pripoj hodnotky k polu
 			if((msg.result.status == "running") && angular.isArray(msg.result.data[Object.keys(msg.result.data)[0]])){
+			// if((msg.result.status == "running") ){
 				// console.log('som v running');
 
 				//zisti kluce, cize meno vracajucich sa vyslednych hodnot ako x,y,v atd..
@@ -229,7 +230,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 				//aby sa spustil len raz interval //zacni ked uz su nakumulovane data
 				// if(!int_start){
-				if((int_start == false) && cancated_obj[$scope.keys[0]].length > 40){
+				if((int_start == false) && cancated_obj[$scope.keys[0]].length > 10){
 					// a tabulku tiez len raz zobrazime
 					$scope.tableshow = true;
 					//aby sa spustil len raz interval
@@ -343,8 +344,6 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 							// console.log($scope.data_to_display.length);
 
 
-								//pridaj posledny iba ak samplovanie nesedi s celkovym poctom
-								// if( (cancated_obj[$scope.keys[0]].length % skip_samples) != 0){
 								if( index != cancated_obj[$scope.keys[0]].length){
 									var obj = {};
 									angular.forEach($scope.keys,function(key){

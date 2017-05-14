@@ -27,7 +27,8 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="row in data_to_display">
-								<td ng-repeat="(key,value) in row">{{value}}</td>
+<!-- 								<td ng-repeat="(key,value) in row"><span ng-if="key=='di'||key=='ur'">{{value | smallnum}}</span><span ng-if="key!='di' && key!='ur'">{{value}}</span></td>
+ -->								<td ng-repeat="(key,value) in row">{{value}}</td>
 							</tr>
 						</tbody>
 					</table>
