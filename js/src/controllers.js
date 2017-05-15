@@ -465,7 +465,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 						angular.forEach($scope.charts,function(chart){
 							chart.push_new_val(obj,$scope.units);
 						});
-						my_canvas.push_new_val(obj,$scope.units);
+						my_canvas.push_new_val(obj,$scope.units,true);
 					}
 
 					//ukonci interval
