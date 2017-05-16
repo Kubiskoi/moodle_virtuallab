@@ -128,14 +128,14 @@ class mod_virtuallab_mod_form extends moodleform_mod {
 
         
 
-        $mform->setDefault('mfilepar', 'Sikmy_vrh_par');
-        $mform->setDefault('mfilescript', 'projectile_sim');
-        $mform->setDefault('foldername', 'sikmy_vrh');
-        $mform->setDefault('ipadrs', 'localhost');
-        $mform->setDefault('port', '3001');
-        $mform->setDefault('ipdb', 'localhost');
-        $mform->setDefault('portdb', '27017');
-        $mform->setDefault('skipsamples', '20');
+        // $mform->setDefault('mfilepar', 'Sikmy_vrh_par');
+        // $mform->setDefault('mfilescript', 'projectile_sim');
+        // $mform->setDefault('foldername', 'sikmy_vrh');
+        // $mform->setDefault('ipadrs', 'localhost');
+        // $mform->setDefault('port', '3001');
+        // $mform->setDefault('ipdb', 'localhost');
+        // $mform->setDefault('portdb', '27017');
+        // $mform->setDefault('skipsamples', '20');
 
 
 

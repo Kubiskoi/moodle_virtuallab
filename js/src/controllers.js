@@ -149,24 +149,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 	var that = this;
 	var jump_ms;
 
-		//funkcia vrati true ak je pole plne rovnakych prvkov
-		// this.identical = function(array) {
-	 //    	for(var i = 0; i < array.length - 1; i++) {
-	 //    	    if(array[i] !== array[i+1]) {
-	 //    	        return false;
-	 //    	    }
-	 //    	}
-	 //    	return true;
-		// }
 
-		// //ak poslednych 30 je rovnakych vrat true
-		// this.check_help_arr = function(arr){
-		// 	var new_arr = arr.slice(arr.length-300,arr.length);
-		// 	if(new_arr.length == 300 && that.identical(new_arr)){
-		// 		return true;
-		// 	}
-		// 	return false;
-		// }
 	
 	
 	//ked sa resolvnu MyGlovalVars
@@ -211,7 +194,6 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 			//ak je status running a prve pole z dat uz ma nejake hodnoty tak pripoj hodnotky k polu
 			if((msg.result.status == "running") && angular.isArray(msg.result.data[Object.keys(msg.result.data)[0]])){
-			// if((msg.result.status == "running") ){
 				// console.log('som v running');
 
 				//zisti kluce, cize meno vracajucich sa vyslednych hodnot ako x,y,v atd..
@@ -245,36 +227,11 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 						jump_ms = 200;
 					}
 
-					// $timeout(function(){
-						// console.log('zacne o sekundu neskor');
 
 
 					//interval co prechadza pospajanymi polami hodnot
 					my_interval = $interval(function(){
-						// console.log('interval');
-						//do help_arr ukladaj dlzku je jedno akeho pola
-						// help_arr.push(cancated_obj[$scope.keys[0]].length);
-						//ak toto pole ma uz na poslednych x miestach rovnaku hodnotu, viem ze neprijmam uz nove hodnoty
-						//a mozem pripojit poslednu hodnotu a ukoncit interval
-						// if(that.check_help_arr(help_arr)){
-						// 	var obj = {};
-						// 	angular.forEach($scope.keys,function(key){
-						// 		obj[key] = cancated_obj[key][cancated_obj[key].length-1];
-						// 	})
-						// 	//pushni posledny riadok tabulky
-						// 	$scope.data_to_display.push(obj);
-
-						// 	//daj hodnotu aj grafom
-						// 	angular.forEach($scope.charts,function(chart){
-						// 		chart.push_new_val(obj,$scope.units);
-						// 	});
-
-						// 	my_canvas.push_new_val(obj,$scope.units);
-
-						// 	//ukonci interval
-						// 	$interval.cancel(my_interval);
-						// 	}
-							//tu konci if overenia posledneho udaju
+			
 						
 							//ak sa index nachadza v prijatom poli cize mam co zobrazovat
 							if(index < cancated_obj[$scope.keys[0]].length){
@@ -302,9 +259,6 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 
 					//tu konci interval
 					},jump_ms);
-					// },skip_samples*10);
-				//tu konci timeout
-				// },3000);
 			
 
 
@@ -465,7 +419,7 @@ app.controller('PriebehCtrl',function($scope,$rootScope,MyGlobalVars,$http,socke
 						angular.forEach($scope.charts,function(chart){
 							chart.push_new_val(obj,$scope.units);
 						});
-						my_canvas.push_new_val(obj,$scope.units,true);
+						my_canvas.push_new_val(obj,$scope.units);
 					}
 
 					//ukonci interval

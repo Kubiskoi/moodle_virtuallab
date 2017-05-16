@@ -336,23 +336,83 @@ app.factory('myCanvas',function(){
     //  animacia dve nadrze
     //  ===========================================
     this.dve_nadrze_draws = {};
+    this.dve_nadrze_draws.draw_bowl= function(x){
+      that.ctx.beginPath();
+      that.ctx.fillStyle="#63bbff";
+      that.ctx.fillRect(x-98,11,x+297,30);
+      
+      that.ctx.moveTo(x-99,380);
+      that.ctx.lineTo(x-99,10);
+      that.ctx.lineTo(x+300,10);
+      that.ctx.lineTo(x+300,90);
+      //lave cerpadlo
+      that.ctx.moveTo(x-89,370);
+      that.ctx.lineTo(x-89,300);
+      that.ctx.lineTo(x-59,300);
+      that.ctx.lineTo(x-59,260);
+      that.ctx.lineTo(x-89,260);
+      that.ctx.lineTo(x-89,30);
+
+
+      that.ctx.stroke();
+      
+
+
+
+
+      that.ctx.closePath();
+
+    }
+    this.dve_nadrze_draws.draw_zero_level = function(x){
+      that.ctx.beginPath();
+      that.ctx.setLineDash([10,5]);
+      that.ctx.moveTo(x-10,105);
+      that.ctx.lineTo(x+275,105);
+
+      that.ctx.stroke();
+
+      that.ctx.closePath();
+      that.ctx.setLineDash([]);
+      that.ctx.transform(1, 0, 0, -1, 0, that.cnv.height);
+      that.ctx.beginPath();
+      that.ctx.font = "15px Arial";
+      that.ctx.fillStyle="black";
+      that.ctx.fillText('0 [m] level', x-80,that.cnv.height - 100);
+      that.ctx.closePath();
+      that.ctx.transform(1, 0, 0, -1, 0, that.cnv.height);
+    }
     this.dve_nadrze_draws.draw_nadrze = function(x){
       that.ctx.beginPath();
       that.ctx.moveTo(x,100);
       that.ctx.lineTo(x,350);
       that.ctx.stroke();
-      that.ctx.moveTo(x+75,130);
+      that.ctx.moveTo(x+75,105);
       that.ctx.lineTo(x+75,350);
       that.ctx.stroke();
       that.ctx.moveTo(x,100);
       that.ctx.lineTo(x+75,100);
       that.ctx.stroke();
 
-      that.ctx.moveTo(x+200,130);
+      that.ctx.moveTo(x+200,105);
       that.ctx.lineTo(x+200,350);
       that.ctx.stroke();
-      that.ctx.moveTo(x+75+200,100);
+      that.ctx.moveTo(x+75+200,110);
       that.ctx.lineTo(x+75+200,350);
+      that.ctx.moveTo(x+75+200,105);
+      that.ctx.lineTo(x+75+200,100);
+
+      //vylev
+      that.ctx.moveTo(x+75+200,110);
+      that.ctx.lineTo(x+75+220,110);
+      that.ctx.lineTo(x+75+220,90);
+
+      that.ctx.moveTo(x+75+200,105);
+      that.ctx.lineTo(x+75+215,105);
+      that.ctx.lineTo(x+75+215,90);
+
+
+
+
       that.ctx.stroke();
       that.ctx.moveTo(x+200,100);
       that.ctx.lineTo(x+75+200,100);
@@ -363,8 +423,8 @@ app.factory('myCanvas',function(){
         this.dve_nadrze_draws.draw_hladiny = function(x,h1,h2){
       that.ctx.beginPath();
       that.ctx.fillStyle="#63bbff";
-      that.ctx.fillRect(x+1,101,73,h1*1000);
-      that.ctx.fillRect(x+1+200,101,73,h2*1000);
+      that.ctx.fillRect(x+1,105,73,h1*1000);
+      that.ctx.fillRect(x+1+200,105,73,h2*1000);
       that.ctx.stroke();
 
       that.ctx.closePath();
@@ -375,30 +435,44 @@ app.factory('myCanvas',function(){
           that.ctx.lineTo(x+75+200,100);
           that.ctx.stroke();
 
-          that.ctx.moveTo(x+75,130);
-          that.ctx.lineTo(x+200,130);
+        
+          that.ctx.moveTo(x+75,105);
+          that.ctx.lineTo(x+200,105);
           that.ctx.stroke();
-
-          that.ctx.moveTo(x+100+33,100);
-          that.ctx.lineTo(x+100+33,140);
-          that.ctx.stroke();
-
-          that.ctx.fillStyle="black";
-          that.ctx.fillRect(x+100+25,140,20,10);
-          that.ctx.stroke();
-
-          that.ctx.fillStyle="#63bbff";
-          var myh1 = h1*1000;
-          if(myh1>= 30)myh1 = 30;
-          that.ctx.fillRect(x+1+70,101,63,myh1);
           
-          var myh2 = h2*1000;
-          if(myh2>= 30)myh2 = 30;
-          that.ctx.fillRect(x+1+75+55,101,70,myh2);
+            //stredny valve
+          that.ctx.moveTo(x+100+33,104);
+          that.ctx.lineTo(x+100+33,120);
+          that.ctx.stroke();
+          that.ctx.fillStyle="black";
+          that.ctx.fillRect(x+100+25,120,20,10);
+          that.ctx.stroke();
+
+            //pravy valve
+          that.ctx.moveTo(x+75+200,110);
+          that.ctx.lineTo(x+75+210,120);
+          that.ctx.fillStyle="black";
+          that.ctx.fillRect(x+75+210,120,20,10);
+          
+         
+          
+
+         
+
+          //voda v potrubi
+          that.ctx.fillStyle="#63bbff";
+          // var myh1 = h1*1000;
+          // if(myh1>= 28)myh1 = 28;
+          that.ctx.fillRect(x+1,101,273,4);
+          
+          // var myh2 = h2*1000;
+          // if(myh2>= 28)myh2 = 28;
+          // that.ctx.fillRect(x+1+75+55,101,70,myh2);
 
           // that.ctx.fillRect(x+1+200,101,73,h2*1000);
           that.ctx.stroke();
-        
+          
+      
         
         that.ctx.closePath();
     }
@@ -421,45 +495,105 @@ app.factory('myCanvas',function(){
     
 
         that.ctx.moveTo(0,380);
-        that.ctx.lineTo(70,380);
-        that.ctx.moveTo(0,365);
-        that.ctx.lineTo(40,365);
-        that.ctx.moveTo(40,365);
-        that.ctx.lineTo(40,355);
-        that.ctx.moveTo(70,380);
-        that.ctx.lineTo(70,355);
+        that.ctx.lineTo(135,380);
+        that.ctx.moveTo(10,370);
+        that.ctx.lineTo(125,370);
+        that.ctx.moveTo(125,370);
+        that.ctx.lineTo(125,360);
+        that.ctx.moveTo(135,380);
+        that.ctx.lineTo(135,360);
         that.ctx.stroke();
 
       that.ctx.closePath();
 
     }
 
-    this.dve_nadrze_draws.draw_inp_water = function(){
+    this.dve_nadrze_draws.draw_cloese_valves = function(x){
+      that.ctx.beginPath();
+
+      //pravy
+      that.ctx.moveTo(x+75+200,100);
+      that.ctx.lineTo(x+75+200,120);
+      that.ctx.stroke();
+
+
+      //stredny
+      that.ctx.moveTo(x+100+33,100);
+      that.ctx.lineTo(x+100+33,120);
+      that.ctx.stroke();
+
+      that.ctx.closePath();
+
+    }
+
+    this.dve_nadrze_draws.draw_inp_water = function(x){
       that.ctx.beginPath();
 
 
           that.ctx.fillStyle="#63bbff";
-          that.ctx.fillRect(0,365,70,15);
-          that.ctx.fillRect(40,355,30,25);
-
-          that.ctx.moveTo(40, 355);
-          that.ctx.lineTo(33, 340);
-          that.ctx.lineTo(45, 350);
-          that.ctx.lineTo(45, 335);
-          that.ctx.lineTo(55, 350);
-          that.ctx.lineTo(60, 335);
-          that.ctx.lineTo(65, 350);
-          that.ctx.lineTo(75, 345);
-
-
-          that.ctx.lineTo(70, 355);
-          that.ctx.fill();
+          that.ctx.fillRect(0,370,135,10);
+          that.ctx.fillRect(125,360,10,10);
+          that.ctx.fillRect(x-99,20,10,350);
+          that.ctx.fillRect(x-99,260,40,40);
           that.ctx.strokeStyle = '#63bbff';
+
+          that.ctx.lineWidth=5;
+          that.ctx.moveTo(x+75+199,107);
+          that.ctx.lineTo(x+75+219,107);
+          that.ctx.moveTo(x+75+218,107);
+          that.ctx.lineTo(x+75+218,15);
           that.ctx.stroke();
+          that.ctx.lineWidth=1;
+
+
+          that.ctx.moveTo(125, 360);
+          that.ctx.lineTo(120, 350);
+          that.ctx.lineTo(127, 355);
+          that.ctx.lineTo(130, 350);
+          that.ctx.lineTo(135, 355);
+          that.ctx.lineTo(140, 350);
+          that.ctx.lineTo(135, 360);
+          that.ctx.fill();
+          that.ctx.stroke();
+
+
+
 
       that.ctx.closePath();
       that.ctx.strokeStyle = 'black';
 
+
+    }
+
+    this.dve_nadrze_draws.draw_motor = function(r){
+      that.ctx.save();
+      that.ctx.translate(20, 280); 
+      that.ctx.rotate(-r*Math.PI/180);
+      that.ctx.beginPath();
+        that.ctx.arc(0, 0, 5, 0, 2 * Math.PI, false);
+        that.ctx.fillStyle="black";
+
+        that.ctx.fill();
+        that.ctx.fillStyle="#63bbff";
+
+       
+        that.ctx.moveTo(0,0);
+        that.ctx.lineTo(-19,0);
+
+        that.ctx.moveTo(0,0);
+        that.ctx.lineTo(19,0);
+
+        that.ctx.moveTo(0,0);
+        that.ctx.lineTo(0,19);
+
+        that.ctx.moveTo(0,0);
+        that.ctx.lineTo(0,-19);
+
+
+        that.ctx.stroke();
+
+      that.ctx.closePath();
+      that.ctx.restore();
 
     }
     //  ===========================================
@@ -477,7 +611,7 @@ app.factory('myCanvas',function(){
           init_volny_pad();
           break;
       case "dve_nadrze":
-          // this.begin_offset_volny_pad = 60;
+          this.draw_nadrze_x_dif = 100;
           init_dve_nadrze();
           break;
       default:
@@ -502,12 +636,18 @@ app.factory('myCanvas',function(){
     }
 
     function init_dve_nadrze(){
-      that.dve_nadrze_draws.draw_nadrze(10);
-      that.dve_nadrze_draws.draw_pipe(10,0,0);
+      that.dve_nadrze_draws.draw_zero_level(that.draw_nadrze_x_dif);
+      that.dve_nadrze_draws.draw_nadrze(that.draw_nadrze_x_dif);
+      that.dve_nadrze_draws.draw_pipe(that.draw_nadrze_x_dif,0,0);
       that.dve_nadrze_draws.draw_inp();
+      that.dve_nadrze_draws.draw_bowl(that.draw_nadrze_x_dif);
+      that.dve_nadrze_draws.draw_cloese_valves(that.draw_nadrze_x_dif);
+      that.dve_nadrze_draws.draw_motor();
+      that.nadrz_counter = 0;
+
     }
 
-    this.push_new_val = function(val,units,last = false){
+    this.push_new_val = function(val,units){
       switch(this.experiment){
         case "sikmy_vrh":
               that.ctx.clearRect(0, 0, that.cnv.width, that.cnv.height);
@@ -528,13 +668,23 @@ app.factory('myCanvas',function(){
 
           break;
         case "dve_nadrze":
+              var x_dif = that.draw_nadrze_x_dif;
               that.ctx.clearRect(0, 0, that.cnv.width, that.cnv.height);
-              that.dve_nadrze_draws.draw_hladiny(10,val.x1,val.x2);
-              that.dve_nadrze_draws.draw_nadrze(10);
-              that.dve_nadrze_draws.draw_pipe(10,val.x1,val.x2);
-              that.dve_nadrze_draws.draw_vals(10,val.x1,val.x2);
-              if(last == false)that.dve_nadrze_draws.draw_inp_water();
+              that.dve_nadrze_draws.draw_hladiny(x_dif,val.x1,val.x2);
+              that.dve_nadrze_draws.draw_vals(x_dif,val.x1,val.x2);
+              that.dve_nadrze_draws.draw_pipe(x_dif,val.x1,val.x2);
+
+              if(val.w != val.x2){
+                that.dve_nadrze_draws.draw_inp_water(x_dif);
+                that.nadrz_counter=that.nadrz_counter+10;
+              }
+              else that.dve_nadrze_draws.draw_cloese_valves(x_dif);
               that.dve_nadrze_draws.draw_inp();
+              that.dve_nadrze_draws.draw_nadrze(x_dif);
+              that.dve_nadrze_draws.draw_zero_level(x_dif);
+              that.dve_nadrze_draws.draw_bowl(x_dif);
+              that.dve_nadrze_draws.draw_motor(that.nadrz_counter);
+              
 
           break;
       }

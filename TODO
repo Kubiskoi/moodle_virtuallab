@@ -3,12 +3,7 @@ TODO
 
 
 
-spravit vodne nadrze
-	pouzivam 2015, ked som skusil 2016 napisalo mi ze ju mam otvorit v 2016 a vyexportovat pre kompatibilitu s 2015
-	
 
-	do grafu
-	signal control (riadenie ur)
 	
 
 
@@ -16,12 +11,3 @@ spravit vodne nadrze
 
 
 
-firefox TEST
-
-
-odstranit prednadstavene hodnoty v moodle formulare
-
-
-poznamky pre mna:
-	- ako funguju grafy:
-		grafy sa vyrobia podla nastaeni outputu kazdy dostane vsetky data ale vybera si len tie co potrebuje
